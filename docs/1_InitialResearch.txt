@@ -1,0 +1,32 @@
+@file 1_InitialResearch.txt
+@location docs
+@author Raymond Byczko
+@company self
+@start_date 2016-02-15
+
+The purpose of this file is to discuss initial research into
+how certain decisions were made with 'postcard creator'.
+
+1.0 PHP FRAMEWORK
+
+A model view controller (MVC) framework is a strong way to go because
+of the decoupling of functionality that occurs.  Controllers will
+do the routing, models will manipulate the database, and the view
+will take care of output.
+
+Months of recent experience with CodeIgniter 3.0 indicates this is
+a very good MVC.  So based on favorable real world experience,
+its a good choice.
+
+2.0 DATABASE REQUIREMENT
+
+The requirements indicate a standalone (serverless) database is
+preferred rather than one with a server.  So the choice is
+something like Sqlite3 vs. Mysql.
+
+Standalone should be fine.  However, does Sqlite3 work in CodeIgniter?
+I googled it and got a positive at the following URL.
+
+http://stackoverflow.com/questions/37079746/sqlite3-in-codeigniter-3-0-6
+
+So based on this, we are fine with CodeIgniter.
