@@ -3,6 +3,8 @@
 @author Raymond Byczko
 @company self
 @start_date 2016-02-15
+@change_history 2016-02-15, RByczko, Added '3.0 VERSION CONTROL'
+and '3.1 VERSION CONTROL - OTHER SOFTWARE ETC'
 
 The purpose of this file is to discuss initial research into
 how certain decisions were made with 'postcard creator'.
@@ -30,3 +32,41 @@ I googled it and got a positive at the following URL.
 http://stackoverflow.com/questions/37079746/sqlite3-in-codeigniter-3-0-6
 
 So based on this, we are fine with CodeIgniter.
+
+3.0 VERSION CONTROL
+
+Git on github.com is utilized as version control.
+
+For reference purposes, here are some steps as to what has to be done.
+
+>cd websites/postcardit
+>git init .
+>cd docs
+>cd git add 1_InitialResearch.txt
+>git commit -m "RByczko etc"
+>git remote add origin git@github.com:RaymondByczko/postcardit.git
+>git push -u origin master
+
+For the above, I am just emphasizeing the remote add and push for git.
+Its just some steps that are handy to document, at least for me.
+
+3.1 VERSION CONTROL - OTHER SOFTWARE ETC
+
+It is easy to just start using some framework etc, and forget (ignore) other
+issues with it.  What I am speaking of is some 3rd party framework like
+CodeIgniter.  That code was downloaded as a zip.  When it is extracted, it is
+nice to have 'git commits' on the extracted files.  That is, there is a commit
+before the extraction.  Then the extraction happens.  Those extracted files
+are then added completely to git, and then another commit happens.
+In this way, the addition of CodeIgniter is bounded lets say, before, and after,
+by commits.
+
+This allows post install changes to CodeIgniter, like adding a controller lets say,
+to be in its own commit.  The evolution of the igniter application can be more
+properly tracked in this way.
+
+I like this seperation in version control, with proper demarcation.
+
+The process would be less than optimum if a) you extract code igniter b) you
+immediately add controllers, views, and change files and then c) do a complete
+git add/git commit.
