@@ -1,0 +1,1 @@
+alias migdate='date +%Y%m%d%H%M%S'

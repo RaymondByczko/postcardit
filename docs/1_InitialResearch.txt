@@ -2,9 +2,14 @@
 @location docs
 @author Raymond Byczko
 @company self
-@start_date 2016-02-15
-@change_history 2016-02-15, RByczko, Added '3.0 VERSION CONTROL'
+@start_date 2017-02-15
+@change_history 2017-02-15, RByczko, Added '3.0 VERSION CONTROL'
 and '3.1 VERSION CONTROL - OTHER SOFTWARE ETC'
+@change_history 2017-02-15, RByczko, Added '4.0 WEBSERVER'.
+And subsequent sections for WEBSERVER.
+@change_history 2017-02-15, RByczko, Added the following:
+'5.0 DATABASE - CODEIGNITER', '5.1 DATABASE - EXAMPLE AFTER
+MIGRATION'.  Also corrected dates.
 
 The purpose of this file is to discuss initial research into
 how certain decisions were made with 'postcard creator'.
@@ -32,6 +37,7 @@ I googled it and got a positive at the following URL.
 http://stackoverflow.com/questions/37079746/sqlite3-in-codeigniter-3-0-6
 
 So based on this, we are fine with CodeIgniter.
+
 
 3.0 VERSION CONTROL
 
@@ -70,3 +76,65 @@ I like this seperation in version control, with proper demarcation.
 The process would be less than optimum if a) you extract code igniter b) you
 immediately add controllers, views, and change files and then c) do a complete
 git add/git commit.
+
+4.0 WEBSERVER
+
+Apache2 is used as the webserver.  Local development occurs on a Linux
+Ubuntu box.
+
+postcardit.dev is created under /etc/apache2/sites-available
+
+The site becomes enabled by running:
+sudo a2ensite postcardit.dev
+
+Running the above, you are reminded that you need to run:
+service apache2 reload
+
+4.1 WEBSERVER - INDEXES
+
+Made sure to put '-Indexes' as in the following it or one will see directory
+contents.
+
+<Directory /home/raymond/websites/postcardit/>
+        Options -Indexes FollowSymLinks MultiViews
+        AllowOverride All
+        Order allow,deny
+        allow from all
+</Directory>
+
+4.2 WEBSERVER - SET DOCROOT PROPERLY 
+
+CodeIgniter advises to set DOCROOT to where index.php is.  Do it like this within
+postcardit.dev !
+
+DocumentRoot /home/raymond/websites/postcardit/CodeIgniter-3.1.3/
+
+5.0 DATABASE - CODEIGNITER
+
+Migration files are useful to store the step by step build up of a database schema.
+Each step along the way is stored in its own php file.  Calling a certain migrations
+command allows build up or tear down, and other type of configuration too.
+
+For this to work, timestamps are useful.  I have a bash alias known as 'migdate'.
+It is stored in ./bash/bash_aliases  Its normally a hidden file, but I removed
+the initial '.' from its name for clarity.
+
+You use migdate in the following way, relying on command substitution in bash.
+Here is an example invocation.
+
+touch `migdate`_add_account.php
+
+Touch creates an empty file.  The 'add_account' bit in the name reminds us we are adding
+a table called account.  Inside the file create, one can put in some php code.
+
+Basically you need a class that extends (that is derives) from CI_Migration.
+
+5.1 DATABASE - EXAMPLE AFTER MIGRATION
+
+It is possible to examine the schema of the sqlite database file after running a migration.
+Here is a screenshot after two seperate migration files were processed, for when
+the schema is constructed.
+
+See: screenshots/schema_after_2_migration_steps.png
+
+As it is said, a picture is worth a thousand words.
