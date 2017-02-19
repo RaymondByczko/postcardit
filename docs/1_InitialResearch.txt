@@ -138,3 +138,56 @@ the schema is constructed.
 See: screenshots/schema_after_2_migration_steps.png
 
 As it is said, a picture is worth a thousand words.
+
+6.0 JQUERY
+
+URL: jquerymobile.com/download
+Download: jquery.mobile-1.4.5.zip
+Extracted to: postcardit/JQueryMobile_1_4_5
+
+6.1 JQUERY-MOBILE ISSUE
+
+
+JQuery Mobile needs the core to run.  The latest for JQuery Mobile is 1.4.5.
+The latest for the core is 3.1.1.  However, when trying to do Headers and Footers,
+and have each fixed to the top and bottom respectively, which is a 'nice thing to have',
+the footer does not appear at the bottom of the available space.
+
+Somehow, reverting the core back to 1.12.4 seems to allow headers and footers
+to work, and they are fixed where they are supposed to be.
+
+Here is a code snippet showing the replacement.  Be aware of this issue!
+
+<link rel="stylesheet" type="text/css" href="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.css" />
+<!--<script type="text/javascript" src="/JQuery_3_1_1/jquery-3.1.1.js"></script>-->
+<script type="text/javascript" src="/JQuery_1_12_4/jquery-1.12.4.js"></script>
+<script type="text/javascript" src="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.js"></script>
+
+Note this issue is reported on p. 26 of the book 'jQueryMobile Up and Running' by Maximiliano
+Firtman (now thats a name!).  It states 'jQuery Mobile 1.0 requires jQuery code 1.6.4.  Don't
+try to use a later version of the core because it might be incompatible'.
+
+6.2 JQUERY-MOBILE-FORM_OPEN_MULTIPART
+
+An interesting and long problem to debug, whereby a file upload was working fine before,
+but then failed upon inclusion of JQueryMobile.  Why?
+
+Everything was tried with much google, to no avail.  And then it was considered to look
+under forms in the index of my book 'jQueryMobile - Up and Running' by Maximiliano Firtman.
+
+See page 116 of that text.  In a section titled "Forcing a Non-AJAX Form", it is said,
+"If we want to force a standard HTTP request without AJAX, we can use data-ajax="false"
+on the form element.  This is particularly useful if the action is on a different domain
+host or when using file uploads (more on this later)."
+
+Below is a code fragment where the form_open_multipart is used twice, but commented out
+once.  The one that is excluded from execution leads to failure - the file will not
+upload.  All one sees is "You did not select a file to upload" even though you did.
+The non-commented one works like a charm.  Thats all it took.
+
+<?php // echo form_open_multipart(site_url('postcard/upload_now/'.$id)); ?>
+<?php echo form_open_multipart(site_url('postcard/upload_now/'.$id), array('data-ajax'=>'false')); ?>
+
+This is only a theory but the JQuery library must someone force file upload into ajax mode,
+and there is no callback in the javascript world, because one is assuming one is
+entirely in the PHP world.
