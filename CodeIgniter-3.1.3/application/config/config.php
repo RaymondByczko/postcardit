@@ -24,9 +24,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 |
 */
 /* Development */
-$config['base_url'] = 'http://postcardit.dev/';
+// $config['base_url'] = 'http://postcardit.dev/';
 /* Production on AWS as of 2017-02-20 */
-// $config['base_url'] = 'http://postcardit-env-git-master.us-east-1.elasticbeanstalk.com/';
+$config['base_url'] = 'http://postcardit-env-git-master.us-east-1.elasticbeanstalk.com/';
 
 
 /*
