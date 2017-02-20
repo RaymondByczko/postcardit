@@ -191,3 +191,16 @@ The non-commented one works like a charm.  Thats all it took.
 This is only a theory but the JQuery library must someone force file upload into ajax mode,
 and there is no callback in the javascript world, because one is assuming one is
 entirely in the PHP world.
+
+7.0 DATABASE COLUMN LENGTHS ETC
+
+7.1 POSTCARD TABLE
+
+Need to store the name of the file uploaded.  What is the length of the column?
+
+Google revealed an ok answer.  Here is the URL used.
+
+https://www.google.com/#q=max+file+name+length+ubuntu
+
+Its revealed it should be 255 characters.  This does not include directory
+components.
