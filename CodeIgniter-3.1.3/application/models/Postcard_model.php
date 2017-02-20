@@ -6,8 +6,17 @@
  * @start_date 2017-02-16 February 16, 2017
  * @purpose To implement a CI model to access the postcard table
  * in the database.
- * @change_history 2016-01-06, January 06, 2016, Started this file
+ * @change_history 2017-02-19, February 19, 2017, Removed
+ * methods from remindme (inherited via cp-paste).  Either delete
+ * or reconstructed for postcard.
+ * Added delete (postcard) method.
+ * Added update_upload_file method.
+ * Added activate method.
+ * Added deactivate method.
+ * Added delete method.
+ * Added get_upload_file method.
  * @status incomplete
+ * @todo adjust get_accounts to get_postcards or delete it.
  */
 class Postcard_model extends CI_Model {
 	public function __construct()
@@ -31,42 +40,89 @@ class Postcard_model extends CI_Model {
 		// @todo return associate array with query, id keys.
 		return $id;
 	}
-	public function activate($account_id)
+	/*
+     * activate the postcard entry identified by postcard_id.
+	 */
+	public function activate($postcard_id)
 	{
 
 		$this->load->database();
 		$data = array (
-			'account_active'=>'1'
+			'postcard_active'=>'1'
 		);
-		$where = 'account_id='.$account_id;
-		$str = $this->db->update_string('account', $data, $where);
+		$where = 'postcard_id='.$postcard_id;
+		$str = $this->db->update_string('postcard', $data, $where);
 
 		$query = $this->db->query($str);
 	}
+
 	/*
-	 * set_number given the account id and a new number, this method
-	 * updates that account.
+     * deactivates the postcard entry identified by postcard_id.
 	 */
-	public function set_number($account_id, $number)
+	public function deactivate($postcard_id)
+	{
+
+		$this->load->database();
+		$data = array (
+			'postcard_active'=>'0'
+		);
+		$where = 'postcard_id='.$postcard_id;
+		$str = $this->db->update_string('postcard', $data, $where);
+
+		$query = $this->db->query($str);
+	}
+
+	/*
+	 * update_upload_file: given the postcard id and an upload file name,
+	 * this method updates the relevant row in table postcard.
+	 */
+	public function update_upload_file($postcard_id, $upload_file)
 	{
 		$data = array(
-			'number'=>$number	
+			'postcard_upload_file'=>$upload_file
 		);
 		$where = array(
-			'account_id'=>$account_id
+			'postcard_id'=>$postcard_id
 		);
 		$this->load->database();
-		$this->db->update('reminder', $data, $where); 
+		$this->db->update('postcard', $data, $where); 
 		// return $query->result();
 	}
 	/*
-	 * delete Given an account_id, this method deletes that account.
+	 * get_upload_file given the postcard id, this method returns
+	 * the postcard upload file data only.
 	 */
-	public function delete($account_id)
+	public function get_upload_file($postcard_id)
 	{
 		$this->load->database();
-		$this->db->where('account_id', $account_id);
-		$this->db->delete('account');
+		$where = array(
+			'postcard_id'=>$postcard_id
+		);
+		$this->db->select('postcard_upload_file');
+		$query = $this->db->get_where('postcard', $where); 
+		return $query->result();
+	}
+
+
+	public function get_postcard($postcard_id)
+	{
+		$this->load->database();
+		$where = array(
+			'postcard_id'=>$postcard_id
+		);
+		$query = $this->db->get_where('postcard', $where); 
+		return $query->result();
+	}
+
+
+	/*
+	 * delete Given an postcard_id, this method deletes that postcard.
+	 */
+	public function delete($postcard_id)
+	{
+		$this->load->database();
+		$this->db->where('postcard_id', $postcard_id);
+		$this->db->delete('postcard');
 	} 
 
 	/*
@@ -95,22 +151,18 @@ class Postcard_model extends CI_Model {
 		$this->load->database();
 		$this->db->insert('reminder', $data);
 	}
-///
-	public function delete_entry($account_id, $reminder_id)
+
+	/*
+	 * Given a postcard_id, this method deletes the postcard entry
+	 * associated with it. WE ALREADY HAVE DELETE
+	 */
+	public function redundant_delete($postcard_id)
 	{
-/**
-		$data = array(
-			'account_id'=>$account_id,
-			// @todo - fix - datetime not datatime 
-			'reminder_datatime'=>$reminder_datetime,
-			'message'=>$message
-		);
-**/
 		$this->load->database();
-		$this->db->where('reminder_id', $reminder_id);
+		$this->db->where('postcard_id', $postcard_id);
 		$this->db->delete('reminder');
 	}
-////
+
 	/* @todo 01-01-16 */
 	public function get_accounts()
 	{

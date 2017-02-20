@@ -6,6 +6,12 @@
  * @start_date 2017-02-16
  * @change_history RByczko
  * @status working, but @todo needs cleanup
+ * @note Used JQuery core 1.12.4 instead of 3.1.1 .
+ * @important note the data-ajax setting to false for the form!
+ * Not doing this will cause hours of wasted time trying to figure
+ * why the form does not work properly.
+ * @change_history RByczko,2017-02-20, Added site_url to footer.  Removed commented
+ * out code
  */
 ?>
 <!DOCTYPE hmtl>
@@ -16,7 +22,6 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.css" />
-<!--<script type="text/javascript" src="/JQuery_3_1_1/jquery-3.1.1.js"></script>-->
 <script type="text/javascript" src="/JQuery_1_12_4/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.js"></script>
 
@@ -36,15 +41,9 @@
 </div>
 <div><!-- AA -->
 <?php echo 'Error='.$error; ?>
-<?php // echo 'APPPATH='.APPPATH; ?>
-<?php // echo '_FILES-names='.$_FILES['name']; ?>
-<?php // echo '_FILES-size='.$_FILES['size']; ?>
-<?php // echo validation_errors(); ?>
-<?php // echo form_open_multipart(site_url('postcard/upload_now/'.$id)); ?>
 <?php echo form_open_multipart(site_url('postcard/upload_now/'.$id), array('data-ajax'=>'false')); ?>
 <!--<input type="hidden" name="MAX_FILE_SIZE" value="10240" >-->
 <input type="file" name="userfile" size="300" />
-<!--<br/><br/>-->
 <input type="submit" value="Upload it" />
 <?php echo form_close(); ?>
 <!--</form>-->
@@ -52,8 +51,8 @@
 <pre>The postcard/upload.php page here!</pre>
 </div><!-- main -->
 <div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
-  <a href="cancel" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
-  <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
+  <a href="<?php echo site_url('postcard/cancel/'.$id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
+  <a href="<?php echo site_url('postcard/add/'.$id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
 </div><!-- footer -->
 </div><!-- page -->
 </body>
