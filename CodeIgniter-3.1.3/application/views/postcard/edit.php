@@ -39,7 +39,7 @@ var context;
 </style>
 </head>
 <body class="mybody">
-<div data-role="page" id="page1" data-fullscreen="true" style="height:100%"><!-- page -->
+<div data-role="page" id="page_e" data-fullscreen="true" style="height:100%"><!-- page -->
   <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
     <a href="home" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
@@ -68,16 +68,64 @@ var context;
 </div><!-- footer -->
 <script>
 // var context;
-$("#page1").bind("pageinit", function(event) {
+
+console.log("pageinit_bind");
+// $("#page_e").bind("pageinit", function(event) {
+// $("#myCanvas").onload = function() {
+window.onload = function() {
 // $(function() {
+console.log("pageinit_start");
 var canvas = $('#myCanvas')[0]; // grabs the canvas element
 context = canvas.getContext('2d'); // returns the 2d context object
 var img = new Image(); //creates a variable for a new image
 
 img.src = '<?php echo $upload_path_name; ?>'; // specifies the location of the image
 context.drawImage(img,0,0); // draws the image at the specified x and y location
+console.log("pageinit_end");
+// });
+};
+
+
+$("#myCanvas").onload = function() {
+console.log("myCanvas_start");
+};
+
+
+$("#page_e").bind("pagebeforecreate", function(event, data) {
+console.log("page_e_pagebeforecreate");
 });
-//$("#page1").trigger("create");
+
+$("#page_e").bind("pagecreate", function(event, data) {
+console.log("page_e_pagecreate");
+});
+
+$("#page_e").bind("pageinit", function(event, data) {
+console.log("page_pageinit");
+var canvas = $('#myCanvas')[0]; // grabs the canvas element
+context = canvas.getContext('2d'); // returns the 2d context object
+var img = new Image(); //creates a variable for a new image
+img.onload = function() {
+context.drawImage(img,0,0); // draws the image at the specified x and y location
+};
+img.src = '<?php echo $upload_path_name; ?>'; // specifies the location of the image
+});
+
+$("#page_e").bind("pageremove", function(event, data) {
+console.log("page_e_pageremove");
+});
+
+$("#page_e").bind("pagebeforeload", function(event, data) {
+console.log("page_e_pagebeforeload");
+});
+
+$("#page_e").bind("pageload", function(event, data) {
+console.log("page_e_pageload");
+});
+
+$("#page_e").bind("pageloadfailed", function(event, data) {
+console.log("page_e_pageloadfailed");
+});
+
 </script>
 
 </div><!-- page -->
