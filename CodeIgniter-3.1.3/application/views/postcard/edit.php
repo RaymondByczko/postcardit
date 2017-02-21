@@ -60,6 +60,13 @@ var context;
  <canvas id="myCanvas" width="200" height="300" style="border:1px solid #000000;">
 </canvas> 
 </div><!-- FF -->
+<div data-role="fieldcontainer">
+<label for="postcardtext_id">Text:</label>
+<input type="text" id="postcardtext_id" name="postcardtext">
+</div>
+<div id="apply_postcardtext_id" data-role="controlgroup">
+	<a href="#" data-role="button">Apply</a>
+</div>
 <pre>The postcard/edit.php page here!</pre>
 </div><!-- main -->
 <div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
@@ -124,6 +131,13 @@ console.log("page_e_pageload");
 
 $("#page_e").bind("pageloadfailed", function(event, data) {
 console.log("page_e_pageloadfailed");
+});
+
+$("#apply_postcardtext_id").bind("click", function(event, data) {
+console.log("apply_postcard_text_id:click");
+// var pc_text = $("#postcardtext_id").text();
+var pc_text = $("#postcardtext_id").val();
+console.log(pc_text);
 });
 
 </script>
