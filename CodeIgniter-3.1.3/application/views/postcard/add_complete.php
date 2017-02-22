@@ -9,6 +9,7 @@
  * @todo I think I need to add a data-role of 'content' to
  * follow the pattern header-content-footer.
  * @todo Fix/clarify purpose.
+ * @change_history 2017-02-21, RByczko, Enhanced upload button.
  */
 ?>
 <html>
@@ -39,7 +40,9 @@
 </div>
 <div class="menu">
 <div class="menu_choice">
-<a href="<?php echo site_url('postcard/upload_now/'.$id);?>"><div id="upload_choice">Upload</div></a>
+<div id="add_complete_id" data-role="controlgroup">
+	<a href="<?php echo site_url('postcard/upload_now/'.$id);?>" id="upload_choice" data-role="button">Upload</a>
+</div>
 <a href="/igniter/index.php/reminder/create/<?php echo $id?>"><div id="menu_create">Create</div></a>
 </div><!-- comment
 --><div class="menu_choice">

@@ -10,6 +10,7 @@
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  * @change_history, 2017-02-20, RByczko, Adjusted links to continue
  * in content area (that is, edit).  Also corrected links in footer.
+ * @change_history, 2017-02-21, RByczko, Adjust Edit button.
  */
 ?>
 <html>
@@ -39,7 +40,9 @@
 </div>
 <div class="menu">
 <div class="menu_choice">
-<a href="<?php echo site_url('postcard/edit/'.$id);?>"><div id="edit_choice">Edit</div></a>
+<div id="upload_complete_id" data-role="controlgroup">
+	<a href="<?php echo site_url('postcard/edit/'.$id);?>" id="edit_choice" data-role="button">Edit</a>
+</div>
 <a href="/igniter/index.php/reminder/create/<?php echo $id?>"><div id="menu_create">Create</div></a>
 </div><!-- comment
 --><div class="menu_choice">
