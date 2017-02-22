@@ -138,6 +138,9 @@ console.log("apply_postcard_text_id:click");
 // var pc_text = $("#postcardtext_id").text();
 var pc_text = $("#postcardtext_id").val();
 console.log(pc_text);
+context.fillStyle="#FF0000";
+context.fillText(pc_text,30,30);
+
 });
 
 </script>
