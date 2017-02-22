@@ -5,6 +5,8 @@
  * @company self
  * @start_date 2017-02-19
  * @change_history RByczko, 2017-02-20, Added canvas. Draft quality.
+ * @change_history RByczko, 2017-02-21, Take 2nd copy of uploaded pic out.
+ * Just provide the canvas one.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -51,11 +53,6 @@ var context;
 <button onclick="dochange();">Change Canvas</button>
 <pre>Hi - Please edit your postcard!</pre>
 </div>
-<div style="height:20%"><!-- EE -->
-<?php echo 'upload_path_name='.$upload_path_name; ?>
-<!--<img src="<?php echo '/application'.$upload_path_name;?>">-->
-<img style="width:30%" src="<?php echo base_url($upload_path_name);?>">
-</div><!-- EE -->
 <div><!-- FF -->
  <canvas id="myCanvas" width="200" height="300" style="border:1px solid #000000;">
 </canvas> 

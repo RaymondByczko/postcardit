@@ -7,6 +7,7 @@
  * @change_history RByczko, 2017-02-19, Enhanced edit functionality.
  * @change_history RByczko, 2017-02-20, Added DRY dir static methods.
  * @change_history RByczko, 2017-02-20, Load javascript library.
+ * @change_history RByczko, 2017-02-21, Provide for uploaded pic in upload_complete.
  * Enhance upload_complete.
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup
@@ -160,11 +161,17 @@ class Postcard extends CI_Controller {
 		else
 		{
 			$data_file_uploaded = $this->upload->data();
-			$data = array('upload_data' => $data_file_uploaded, 'id'=>$postcard_id);
 			$upload_file = $data_file_uploaded['file_name'];
 
 			$this->load->model('Postcard_model','', TRUE);
 			$this->Postcard_model->update_upload_file($postcard_id, $upload_file);
+
+			// $query = $this->Postcard_model->get_upload_file($postcard_id);
+			// $upload_file = $query[0]->postcard_upload_file;
+			$upload_path_name = Postcard::uploads_dir().$upload_file;
+
+			$data = array('upload_data' => $data_file_uploaded, 'upload_path_name'=>$upload_path_name, 'id'=>$postcard_id);
+
 			$this->load->view('postcard/upload_complete', $data);
 			// return TRUE;
 		}

@@ -11,6 +11,7 @@
  * @change_history, 2017-02-20, RByczko, Adjusted links to continue
  * in content area (that is, edit).  Also corrected links in footer.
  * @change_history, 2017-02-21, RByczko, Adjust Edit button.
+ * @change_history, 2017-02-21, RByczko, Put uploaded pic into upload_complete.
  */
 ?>
 <html>
@@ -38,6 +39,10 @@
 <pre>Added postcard id:<?php echo $id; ?></pre>
 <pre>Added file size:<?php echo $upload_data['file_size']; ?></pre>
 </div>
+<div style="height:20%"><!-- EE -->
+<!--<?php echo 'upload_path_name='.$upload_path_name; ?>-->
+<img style="width:30%" src="<?php echo base_url($upload_path_name);?>">
+</div><!-- EE -->
 <div class="menu">
 <div class="menu_choice">
 <div id="upload_complete_id" data-role="controlgroup">
