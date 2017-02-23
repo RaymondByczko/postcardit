@@ -10,6 +10,7 @@
  * @change_history RByczko, 2017-02-22, Added Save and Send buttons.
  * Disabling the save button works.  @todo Need to enhance and remove
  * commented out code.
+ * @change_history RByczko, 2017-02-22, Cleaned up code.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -26,17 +27,6 @@
 <link rel="stylesheet" type="text/css" href="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.css" />
 <script type="text/javascript" src="/JQuery_1_12_4/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.js"></script>
-<!--<script>
-var context;
-$("#page1").bind("pageinit", function(event, data) {
-var canvas = $('#myCanvas')[0]; // grabs the canvas element
-context = canvas.getContext('2d'); // returns the 2d context object
-var img = new Image(); //creates a variable for a new image
-
-img.src = '<?php echo $upload_path_name; ?>'; // specifies the location of the image
-context.drawImage(img,0,0); // draws the image at the specified x and y location
-});
-</script>-->
 <script>
 var context;
 </script>
@@ -52,7 +42,13 @@ var context;
   </div><!-- header -->
   <div role="main" class="ui-content" style="height:inherit"><!-- main -->
 <div class="subheader">
-<script>function dochange() {context.fillStyle="#FF0000"; context.fillText("<?php echo $postcard_message; ?>",30,30);}</script>
+<script>function dochange() {
+	// dochange - applies the message $postcard_message to canvas.
+	context.fillStyle="#FF0000";
+	context.fillText("<?php echo $postcard_message; ?>",30,30);
+	console.log("dochange called");
+}
+</script>
 <button onclick="dochange();">Change Canvas</button>
 <pre>Hi - Please edit your postcard!</pre>
 </div>
