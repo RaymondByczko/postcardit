@@ -11,6 +11,10 @@
  * Disabling the save button works.  @todo Need to enhance and remove
  * commented out code.
  * @change_history RByczko, 2017-02-22, Cleaned up code.
+ * @change_history RByczko, 2017-02-22, Move and change 'Change Canvas' button.
+ * @change_history RByczko, 2017-02-22, Removed:
+ *		$("#send_canvas_id").onload = function() { ...
+ *		It was not called. @todo research button onload possibilities.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -49,12 +53,12 @@ var context;
 	console.log("dochange called");
 }
 </script>
-<button onclick="dochange();">Change Canvas</button>
 <pre>Hi - Please edit your postcard!</pre>
 </div>
 <div><!-- FF -->
  <canvas id="myCanvas" width="200" height="300" style="border:1px solid #000000;">
 </canvas> 
+<button onclick="dochange();">Apply Message</button>
 </div><!-- FF -->
 <div data-role="fieldcontainer">
 <label for="postcardtext_id">Text:</label>
@@ -65,14 +69,6 @@ var context;
 	<a href="#" data-role="button" ui-disabled="true" id="save_canvas_id">Save</a>
 	<a href="#" data-role="button" ui-disabled="true" id="send_canvas_id">Send</a>
 </div>
-
-<script>
-$("#send_canvas_id").onload = function() {
-	console.log("send_canvas_id_onload");
-	// $("#send_canvas_id").button("disable");
-	$("#send_canvas_id").addClass("ui-disabled");
-}
-</script>
 <pre>The postcard/edit.php page here!</pre>
 </div><!-- main -->
 <div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
