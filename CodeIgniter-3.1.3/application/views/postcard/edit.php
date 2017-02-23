@@ -15,6 +15,12 @@
  * @change_history RByczko, 2017-02-22, Removed:
  *		$("#send_canvas_id").onload = function() { ...
  *		It was not called. @todo research button onload possibilities.
+ * 
+ * @change_history RByczko, 2017-02-22, Removed the following:
+ *	$("#save_canvas_id").attr("disabled", "disabled");
+ *	$("#save_canvas_id").button("disable");
+ * These don't seem to work but are possible @todo research subjects.
+ * Further code cleanup.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -76,13 +82,8 @@ var context;
   <a href="<?php echo site_url('postcard/upload_now/'.$postcard_id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
 </div><!-- footer -->
 <script>
-// var context;
-
 console.log("pageinit_bind");
-// $("#page_e").bind("pageinit", function(event) {
-// $("#myCanvas").onload = function() {
 window.onload = function() {
-// $(function() {
 console.log("pageinit_start");
 var canvas = $('#myCanvas')[0]; // grabs the canvas element
 context = canvas.getContext('2d'); // returns the 2d context object
@@ -93,7 +94,6 @@ context.drawImage(img,0,0); // draws the image at the specified x and y location
 $("#save_canvas_id").attr("disabled", "disabled");
 $("#send_canvas_id").attr("disabled", "disabled");
 console.log("pageinit_end");
-// });
 };
 
 
@@ -119,12 +119,6 @@ img.onload = function() {
 context.drawImage(img,0,0); // draws the image at the specified x and y location
 };
 img.src = '<?php echo $upload_path_name; ?>'; // specifies the location of the image
-// $("#save_canvas_id").attr("disabled", "disabled");
-// $("#send_canvas_id").attr("disabled", "disabled");
-
-//// cannot call prior to initialization.
-// $("#save_canvas_id").button("disable");
-// $("#send_canvas_id").button("disable");
 
 $("#save_canvas_id").addClass("ui-disabled");
 $("#send_canvas_id").addClass("ui-disabled");
@@ -164,10 +158,6 @@ $("#save_canvas_id").removeClass("ui-disabled");
 $("#save_canvas_id").bind("click", function(event, data) {
 console.log("save_canvas_id:click");
 $("#send_canvas_id").addClass("ui-disabled");
-// var pc_text = $("#postcardtext_id").val();
-// console.log(pc_text);
-// context.fillStyle="#FF0000";
-// context.fillText(pc_text,30,30);
 });
 
 </script>
