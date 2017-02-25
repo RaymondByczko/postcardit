@@ -23,6 +23,7 @@
  * Further code cleanup.
  * @change_history RByczko, 2017-02-25, Added ajax call.  POST works, but
  * only roughly.  Needs significant enhancement and cleanup.
+ * @change_history RByczko, 2017-02-25, Some cleanup to ajax post call.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -162,25 +163,12 @@ $("#save_canvas_id").bind("click", function(event, data) {
 	console.log("save_canvas_id:click");
 	$("#send_canvas_id").addClass("ui-disabled");
 	var dataURL = canvas.toDataURL();
-	var dataURL2 = "smallAmountText";
-	// $.ajax({
-	// jQuery.ajax({
-
-	// $.ajax({
 	$.post({
-		// type: "post",
-		//contentType: "text/plain",
-		// url: "<?php echo site_url('postcard/save_postcard/'.$postcard_id); ?>",
-
 		url: "<?php echo '/index.php/postcard/save_postcard/'.$postcard_id; ?>",
-
-		// url: "<?php echo base_url('postcard/save_postcard/'.$postcard_id); ?>",
-		// url: "<?php echo '/postcard/save_canvas/'.$postcard_id; ?>",
 		data: ({ 
-			somedata:dataURL,
+			imagedata:dataURL,
 			moredata:'hereitis'
 		})
-		// dataType:"text"
 	}).done(function(o) {
   		console.log('saved'); 
 	    // If you want the file to be visible in the browser 

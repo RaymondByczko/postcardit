@@ -11,6 +11,7 @@
  * Enhance upload_complete.
  * @change_history RByczko, 2017-02-23, Added save_canvas method.
  * @change_history RByczko, 2017-02-23, Added log4php. Added save_postcard.
+ * @change_history RByczko, 2017-02-25, Enhance save_postcard.
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup, especially save_postcard.
  * However, at least I am able to see the _POST parameters.
@@ -225,6 +226,14 @@ class Postcard extends CI_Controller {
 
 	/*
 	 * @purpose To allow saving of a postcard image once it has been edited via canvas.
+	 * This method will be used in a url that is called with a POST parameter, as part
+	 * of an ajax interaction.
+	 *
+	 * This method will return a json data structure indicated how and if the postcard
+	 * was saved.
+	 *
+	 * The POST paramter imagedata is expected.  It represents the contents of a jpg, png or other 
+	 * impage postcard file.
 	 */
 	public function save_postcard($postcard_id)
 	{
@@ -232,51 +241,55 @@ class Postcard extends CI_Controller {
 		$this->load->library('form_validation');
 		$this->form_validation->set_rules('somedata', 'Somedata', 'required');
 		$this->m_log->trace('Postcard::save_postcard called');
-		$sd = $this->input->post('somedata');
-		$this->m_log->trace('... sd='.$sd);
+		$imagedata = $this->input->post('imagedata');
+		$post_interface_problem = FALSE;
+
+		//// Putting into the log imagedata tends to be very large.
+		//// The call to log trace under this is left here just in case.
+		// $this->m_log->trace('... imagedata='.$imagedata);
+
+		// Log the various post parameters.  This was a challenge.
+		// Although seen on the console of firebug, this method at times
+		// could not see the correct POST parameter.
+		//
+		// It was eventually cleared up using $.post instead of $.ajax.
+		// @todo This is a subject of further research.
 		$ak = array_keys($_POST);
 		foreach ($ak as $key=>$val)
 		{
-			$this->m_log->trace('...POST VAL='.$val);
+			$this->m_log->trace('... POST VAL='.$val);
 		}
-		// $img = $_POST['imgBase64'];
-		$img = $this->input->post('somedata');
-		if ($img == NULL)
+		if ($imagedata == NULL)
 		{
-			$this->m_log->trace('... somedata is NULL');
+			$this->m_log->trace('... imagedata is NULL');
 		}
 		else
 		{
-			$this->m_log->trace('... somedata is not NULL');
+			$this->m_log->trace('... imagedata is not NULL');
+			// This means the post parameter is not present.
+			$post_interface_problem = TRUE;
 		}
 		$this->m_log->trace('...postcard_id='.$postcard_id);
+
+		if ($post_interface_problem)
+		{
+		}
 		$this->load->model('Postcard_model','', TRUE);
 		$query = $this->Postcard_model->get_upload_file($postcard_id);
 		$upload_file = $query[0]->postcard_upload_file;
-		$inprocess_path_name = Postcard::inprocess_dir().$upload_file;
+		$inprocess_path_name = '.'.Postcard::inprocess_dir().$upload_file;
 
 		$this->m_log->trace('...inprocess_path_name='.$inprocess_path_name);
-		return;
-		// $upload_dir = somehow_get_upload_dir();  //implement this function yourself
 
-		$img="defaultimg";
-		// $img = $_POST['imgBase64'];
-		$this->m_log->trace('...img='.$img);
+		$imagedata = str_replace('data:image/png;base64,', '', $imagedata);
+		$imagedata = str_replace('data:image/jpg;base64,', '', $imagedata);
+		$imagedata = str_replace(' ', '+', $imagedata);
+		$data = base64_decode($imagedata);
 
-		// $img = str_replace('data:image/png;base64,', '', $img);
-		$img = str_replace('data:image/jpg;base64,', '', $img);
-		$img = str_replace(' ', '+', $img);
-		$data = base64_decode($img);
-
-
-		$this->m_log->trace('...data='.$data);
-
-		// $file = $upload_dir."image_name.png";
-		// $success = file_put_contents($file, $data);
 
 		$success = file_put_contents($inprocess_path_name, $data);
 		$this->m_log->trace('...success='.$success);
-		echo 'success='.$success;
+		// echo 'success='.$success;
 		// header('Location: '.$_POST['return_url']);
 		// $this->load->view('postcard/save_postcard');
 	}
