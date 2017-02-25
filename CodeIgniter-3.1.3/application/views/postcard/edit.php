@@ -24,6 +24,7 @@
  * @change_history RByczko, 2017-02-25, Added ajax call.  POST works, but
  * only roughly.  Needs significant enhancement and cleanup.
  * @change_history RByczko, 2017-02-25, Some cleanup to ajax post call.
+ * @change_history RByczko, 2017-02-25, Enhanced ajax post done.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -170,7 +171,16 @@ $("#save_canvas_id").bind("click", function(event, data) {
 			moredata:'hereitis'
 		})
 	}).done(function(o) {
-  		console.log('saved'); 
+  		console.log('post for canvas complete'); 
+		console.log(o);
+		if (o.ret_code == 0) {
+			console.log('... saved successfully');
+			$("#send_canvas_id").removeClass("ui-disabled");
+		}
+		else
+		{
+			console.log('... not saved successfully');
+		}
 	    // If you want the file to be visible in the browser 
 	    // - please modify the callback in javascript. All you
 	    // need is to return the url to the file, you just saved 

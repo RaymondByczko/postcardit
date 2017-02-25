@@ -12,6 +12,7 @@
  * @change_history RByczko, 2017-02-23, Added save_canvas method.
  * @change_history RByczko, 2017-02-23, Added log4php. Added save_postcard.
  * @change_history RByczko, 2017-02-25, Enhance save_postcard.
+ * @change_history RByczko, 2017-02-25, Add json return for save_postcard.
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup, especially save_postcard.
  * However, at least I am able to see the _POST parameters.
@@ -237,9 +238,10 @@ class Postcard extends CI_Controller {
 	 */
 	public function save_postcard($postcard_id)
 	{
+		header('Content-Type: text/json');
 		$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('somedata', 'Somedata', 'required');
+		$this->form_validation->set_rules('imagedata', 'Imagedata', 'required');
 		$this->m_log->trace('Postcard::save_postcard called');
 		$imagedata = $this->input->post('imagedata');
 		$post_interface_problem = FALSE;
@@ -271,8 +273,16 @@ class Postcard extends CI_Controller {
 		}
 		$this->m_log->trace('...postcard_id='.$postcard_id);
 
-		if ($post_interface_problem)
+		if ($post_interface_problem == FALSE)
 		{
+			$ret_json = array(
+						'ret_code'=>-1, /* 0 is success; -n is failure */
+						'reason'=>'The expected post parameter imagedata does not exist',
+						'file'=>__FILE__,
+						'line'=>__LINE__
+			);
+			echo json_encode($ret_json);
+			return;
 		}
 		$this->load->model('Postcard_model','', TRUE);
 		$query = $this->Postcard_model->get_upload_file($postcard_id);
@@ -289,9 +299,17 @@ class Postcard extends CI_Controller {
 
 		$success = file_put_contents($inprocess_path_name, $data);
 		$this->m_log->trace('...success='.$success);
-		// echo 'success='.$success;
-		// header('Location: '.$_POST['return_url']);
+
 		// $this->load->view('postcard/save_postcard');
+
+		$ret_json = array(
+					'ret_code'=>0, /* 0 is success; -n is failure */
+					'reason'=>'Successful saving of postcard at'.$inprocess_path_name,
+					'file'=>__FILE__,
+					'line'=>__LINE__
+		);
+		echo json_encode($ret_json);
+		return;
 	}
 	/*
 	 * @purpose To allow sending of a postcard once it has been edited.
