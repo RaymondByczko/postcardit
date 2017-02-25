@@ -9,14 +9,25 @@
  * @change_history RByczko, 2017-02-20, Load javascript library.
  * @change_history RByczko, 2017-02-21, Provide for uploaded pic in upload_complete.
  * Enhance upload_complete.
+ * @change_history RByczko, 2017-02-23, Added save_canvas method.
+ * @change_history RByczko, 2017-02-23, Added log4php. Added save_postcard.
  * @todo Loading javascript may change to false.
- * @status working, but @todo needs cleanup
+ * @status working, but @todo needs cleanup, especially save_postcard.
+ * However, at least I am able to see the _POST parameters.
  */
 ?>
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
+require_once('Logger.php');
+Logger::configure('../postcarditlog4php.xml');
+
 class Postcard extends CI_Controller {
+
+		// These private members support 'apache log4php'.
+		private $m_cc_dot=null;
+		private $m_log=null;
 
 		public function __construct()
         {
@@ -28,6 +39,15 @@ class Postcard extends CI_Controller {
 								'autoload' => TRUE
 						)
 				);
+
+				/* Setup 'apache log4php' */
+				$cc = get_called_class();
+				$this->m_cc_dot = str_replace("\\", ".", $cc);
+				$this->m_log = \Logger::getLogger($this->m_cc_dot);
+				$this->m_log->trace('Postcard contructor called');
+				$this->m_log->trace('...logger name='.$this->m_cc_dot);
+
+				// $this->output->enable_profiler(TRUE);
         }
 	/**
 	 * Index Page for this controller.
@@ -44,6 +64,8 @@ class Postcard extends CI_Controller {
 	 */
 	public function index()
 	{
+
+		$this->m_log->trace('Postcard::index called');
 		$this->load->view('utility_message');
 	}
 
@@ -87,7 +109,8 @@ class Postcard extends CI_Controller {
 	 */
 	public function add()
 	{
-		// $this->m_log->trace('Postcard::add');
+
+		$this->m_log->trace('Postcard::add called');
 		if (! file_exists(APPPATH.'/views/postcard/add.php'))
 		{
 			show_404();
@@ -137,7 +160,8 @@ class Postcard extends CI_Controller {
 
 	public function upload_now($postcard_id)
 	{
-// ini_set('display_errors', '1'); error_reporting(E_ALL);
+		$this->m_log->trace('Postcard::upload called');
+		$this->m_log->trace('...postcard_id='.$postcard_id);
 		$dir = Postcard::uploads_dir();
 		$config['upload_path']	= APPPATH.'..'.$dir;
 		$config['allowed_types']='gif|jpg|png';
@@ -183,6 +207,8 @@ class Postcard extends CI_Controller {
 	public function edit($postcard_id)
 	{
 
+		$this->m_log->trace('Postcard::edit called');
+		$this->m_log->trace('...postcard_id='.$postcard_id);
 		$this->load->model('Postcard_model','', TRUE);
 		$query = $this->Postcard_model->get_upload_file($postcard_id);
 		$upload_file = $query[0]->postcard_upload_file;
@@ -197,6 +223,55 @@ class Postcard extends CI_Controller {
 		// echo 'Postcard edit called';
 	}
 
+	/*
+	 * @purpose To allow saving of a postcard image once it has been edited via canvas.
+	 */
+	public function save_postcard($postcard_id)
+	{
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('somedata', 'Somedata', 'required');
+		$this->m_log->trace('Postcard::save_postcard called');
+		$sd = $this->input->post('somedata');
+		$this->m_log->trace('... sd='.$sd);
+		$ak = array_keys($_POST);
+		foreach ($ak as $key=>$val)
+		{
+			$this->m_log->trace('...POST VAL='.$val);
+		}
+		// $img = $_POST['imgBase64'];
+		// $this->m_log->trace('Postcard::save_postcard called');
+		$this->m_log->trace('...postcard_id='.$postcard_id);
+		$this->load->model('Postcard_model','', TRUE);
+		$query = $this->Postcard_model->get_upload_file($postcard_id);
+		$upload_file = $query[0]->postcard_upload_file;
+		$inprocess_path_name = Postcard::inprocess_dir().$upload_file;
+
+		$this->m_log->trace('...inprocess_path_name='.$inprocess_path_name);
+		return;
+		// $upload_dir = somehow_get_upload_dir();  //implement this function yourself
+
+		$img="defaultimg";
+		// $img = $_POST['imgBase64'];
+		$this->m_log->trace('...img='.$img);
+
+		// $img = str_replace('data:image/png;base64,', '', $img);
+		$img = str_replace('data:image/jpg;base64,', '', $img);
+		$img = str_replace(' ', '+', $img);
+		$data = base64_decode($img);
+
+
+		$this->m_log->trace('...data='.$data);
+
+		// $file = $upload_dir."image_name.png";
+		// $success = file_put_contents($file, $data);
+
+		$success = file_put_contents($inprocess_path_name, $data);
+		$this->m_log->trace('...success='.$success);
+		echo 'success='.$success;
+		// header('Location: '.$_POST['return_url']);
+		// $this->load->view('postcard/save_postcard');
+	}
 	/*
 	 * @purpose To allow sending of a postcard once it has been edited.
 	 */
