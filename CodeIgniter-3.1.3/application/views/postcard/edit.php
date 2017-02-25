@@ -177,7 +177,7 @@ $("#save_canvas_id").bind("click", function(event, data) {
 		// url: "<?php echo base_url('postcard/save_postcard/'.$postcard_id); ?>",
 		// url: "<?php echo '/postcard/save_canvas/'.$postcard_id; ?>",
 		data: ({ 
-			somedata:'thedataURL3',
+			somedata:dataURL,
 			moredata:'hereitis'
 		})
 		// dataType:"text"

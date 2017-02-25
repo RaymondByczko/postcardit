@@ -240,7 +240,15 @@ class Postcard extends CI_Controller {
 			$this->m_log->trace('...POST VAL='.$val);
 		}
 		// $img = $_POST['imgBase64'];
-		// $this->m_log->trace('Postcard::save_postcard called');
+		$img = $this->input->post('somedata');
+		if ($img == NULL)
+		{
+			$this->m_log->trace('... somedata is NULL');
+		}
+		else
+		{
+			$this->m_log->trace('... somedata is not NULL');
+		}
 		$this->m_log->trace('...postcard_id='.$postcard_id);
 		$this->load->model('Postcard_model','', TRUE);
 		$query = $this->Postcard_model->get_upload_file($postcard_id);
