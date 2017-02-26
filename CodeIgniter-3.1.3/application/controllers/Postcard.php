@@ -9,14 +9,27 @@
  * @change_history RByczko, 2017-02-20, Load javascript library.
  * @change_history RByczko, 2017-02-21, Provide for uploaded pic in upload_complete.
  * Enhance upload_complete.
+ * @change_history RByczko, 2017-02-23, Added save_canvas method.
+ * @change_history RByczko, 2017-02-23, Added log4php. Added save_postcard.
+ * @change_history RByczko, 2017-02-25, Enhance save_postcard.
+ * @change_history RByczko, 2017-02-25, Add json return for save_postcard.
  * @todo Loading javascript may change to false.
- * @status working, but @todo needs cleanup
+ * @status working, but @todo needs cleanup, especially save_postcard.
+ * However, at least I am able to see the _POST parameters.
  */
 ?>
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+
+require_once('Logger.php');
+Logger::configure('../postcarditlog4php.xml');
+
 class Postcard extends CI_Controller {
+
+		// These private members support 'apache log4php'.
+		private $m_cc_dot=null;
+		private $m_log=null;
 
 		public function __construct()
         {
@@ -28,6 +41,15 @@ class Postcard extends CI_Controller {
 								'autoload' => TRUE
 						)
 				);
+
+				/* Setup 'apache log4php' */
+				$cc = get_called_class();
+				$this->m_cc_dot = str_replace("\\", ".", $cc);
+				$this->m_log = \Logger::getLogger($this->m_cc_dot);
+				$this->m_log->trace('Postcard contructor called');
+				$this->m_log->trace('...logger name='.$this->m_cc_dot);
+
+				// $this->output->enable_profiler(TRUE);
         }
 	/**
 	 * Index Page for this controller.
@@ -44,6 +66,8 @@ class Postcard extends CI_Controller {
 	 */
 	public function index()
 	{
+
+		$this->m_log->trace('Postcard::index called');
 		$this->load->view('utility_message');
 	}
 
@@ -87,7 +111,8 @@ class Postcard extends CI_Controller {
 	 */
 	public function add()
 	{
-		// $this->m_log->trace('Postcard::add');
+
+		$this->m_log->trace('Postcard::add called');
 		if (! file_exists(APPPATH.'/views/postcard/add.php'))
 		{
 			show_404();
@@ -137,7 +162,8 @@ class Postcard extends CI_Controller {
 
 	public function upload_now($postcard_id)
 	{
-// ini_set('display_errors', '1'); error_reporting(E_ALL);
+		$this->m_log->trace('Postcard::upload called');
+		$this->m_log->trace('...postcard_id='.$postcard_id);
 		$dir = Postcard::uploads_dir();
 		$config['upload_path']	= APPPATH.'..'.$dir;
 		$config['allowed_types']='gif|jpg|png';
@@ -183,6 +209,8 @@ class Postcard extends CI_Controller {
 	public function edit($postcard_id)
 	{
 
+		$this->m_log->trace('Postcard::edit called');
+		$this->m_log->trace('...postcard_id='.$postcard_id);
 		$this->load->model('Postcard_model','', TRUE);
 		$query = $this->Postcard_model->get_upload_file($postcard_id);
 		$upload_file = $query[0]->postcard_upload_file;
@@ -197,6 +225,92 @@ class Postcard extends CI_Controller {
 		// echo 'Postcard edit called';
 	}
 
+	/*
+	 * @purpose To allow saving of a postcard image once it has been edited via canvas.
+	 * This method will be used in a url that is called with a POST parameter, as part
+	 * of an ajax interaction.
+	 *
+	 * This method will return a json data structure indicated how and if the postcard
+	 * was saved.
+	 *
+	 * The POST paramter imagedata is expected.  It represents the contents of a jpg, png or other 
+	 * impage postcard file.
+	 */
+	public function save_postcard($postcard_id)
+	{
+		header('Content-Type: text/json');
+		$this->load->helper(array('form', 'url'));
+		$this->load->library('form_validation');
+		$this->form_validation->set_rules('imagedata', 'Imagedata', 'required');
+		$this->m_log->trace('Postcard::save_postcard called');
+		$imagedata = $this->input->post('imagedata');
+		$post_interface_problem = FALSE;
+
+		//// Putting into the log imagedata tends to be very large.
+		//// The call to log trace under this is left here just in case.
+		// $this->m_log->trace('... imagedata='.$imagedata);
+
+		// Log the various post parameters.  This was a challenge.
+		// Although seen on the console of firebug, this method at times
+		// could not see the correct POST parameter.
+		//
+		// It was eventually cleared up using $.post instead of $.ajax.
+		// @todo This is a subject of further research.
+		$ak = array_keys($_POST);
+		foreach ($ak as $key=>$val)
+		{
+			$this->m_log->trace('... POST VAL='.$val);
+		}
+		if ($imagedata == NULL)
+		{
+			$this->m_log->trace('... imagedata is NULL');
+		}
+		else
+		{
+			$this->m_log->trace('... imagedata is not NULL');
+			// This means the post parameter is not present.
+			$post_interface_problem = TRUE;
+		}
+		$this->m_log->trace('...postcard_id='.$postcard_id);
+
+		if ($post_interface_problem == FALSE)
+		{
+			$ret_json = array(
+						'ret_code'=>-1, /* 0 is success; -n is failure */
+						'reason'=>'The expected post parameter imagedata does not exist',
+						'file'=>__FILE__,
+						'line'=>__LINE__
+			);
+			echo json_encode($ret_json);
+			return;
+		}
+		$this->load->model('Postcard_model','', TRUE);
+		$query = $this->Postcard_model->get_upload_file($postcard_id);
+		$upload_file = $query[0]->postcard_upload_file;
+		$inprocess_path_name = '.'.Postcard::inprocess_dir().$upload_file;
+
+		$this->m_log->trace('...inprocess_path_name='.$inprocess_path_name);
+
+		$imagedata = str_replace('data:image/png;base64,', '', $imagedata);
+		$imagedata = str_replace('data:image/jpg;base64,', '', $imagedata);
+		$imagedata = str_replace(' ', '+', $imagedata);
+		$data = base64_decode($imagedata);
+
+
+		$success = file_put_contents($inprocess_path_name, $data);
+		$this->m_log->trace('...success='.$success);
+
+		// $this->load->view('postcard/save_postcard');
+
+		$ret_json = array(
+					'ret_code'=>0, /* 0 is success; -n is failure */
+					'reason'=>'Successful saving of postcard at'.$inprocess_path_name,
+					'file'=>__FILE__,
+					'line'=>__LINE__
+		);
+		echo json_encode($ret_json);
+		return;
+	}
 	/*
 	 * @purpose To allow sending of a postcard once it has been edited.
 	 */

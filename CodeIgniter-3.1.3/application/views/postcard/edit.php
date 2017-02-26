@@ -21,6 +21,10 @@
  *	$("#save_canvas_id").button("disable");
  * These don't seem to work but are possible @todo research subjects.
  * Further code cleanup.
+ * @change_history RByczko, 2017-02-25, Added ajax call.  POST works, but
+ * only roughly.  Needs significant enhancement and cleanup.
+ * @change_history RByczko, 2017-02-25, Some cleanup to ajax post call.
+ * @change_history RByczko, 2017-02-25, Enhanced ajax post done.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -39,6 +43,7 @@
 <script type="text/javascript" src="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.js"></script>
 <script>
 var context;
+var canvas;
 </script>
 <style>
 </style>
@@ -85,7 +90,7 @@ var context;
 console.log("pageinit_bind");
 window.onload = function() {
 console.log("pageinit_start");
-var canvas = $('#myCanvas')[0]; // grabs the canvas element
+canvas = $('#myCanvas')[0]; // grabs the canvas element
 context = canvas.getContext('2d'); // returns the 2d context object
 var img = new Image(); //creates a variable for a new image
 
@@ -112,7 +117,7 @@ console.log("page_e_pagecreate");
 
 $("#page_e").bind("pageinit", function(event, data) {
 console.log("page_pageinit");
-var canvas = $('#myCanvas')[0]; // grabs the canvas element
+canvas = $('#myCanvas')[0]; // grabs the canvas element
 context = canvas.getContext('2d'); // returns the 2d context object
 var img = new Image(); //creates a variable for a new image
 img.onload = function() {
@@ -156,8 +161,31 @@ $("#save_canvas_id").removeClass("ui-disabled");
 });
 
 $("#save_canvas_id").bind("click", function(event, data) {
-console.log("save_canvas_id:click");
-$("#send_canvas_id").addClass("ui-disabled");
+	console.log("save_canvas_id:click");
+	$("#send_canvas_id").addClass("ui-disabled");
+	var dataURL = canvas.toDataURL();
+	$.post({
+		url: "<?php echo '/index.php/postcard/save_postcard/'.$postcard_id; ?>",
+		data: ({ 
+			imagedata:dataURL,
+			moredata:'hereitis'
+		})
+	}).done(function(o) {
+  		console.log('post for canvas complete'); 
+		console.log(o);
+		if (o.ret_code == 0) {
+			console.log('... saved successfully');
+			$("#send_canvas_id").removeClass("ui-disabled");
+		}
+		else
+		{
+			console.log('... not saved successfully');
+		}
+	    // If you want the file to be visible in the browser 
+	    // - please modify the callback in javascript. All you
+	    // need is to return the url to the file, you just saved 
+	    // and than put the image in your browser.
+});
 });
 
 </script>
