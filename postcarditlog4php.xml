@@ -2,7 +2,7 @@
 <configuration xmlns="http://logging.apache.org/log4php/">
     <appender name="default" class="LoggerAppenderFile">
         <layout class="LoggerLayoutSimple" />
-        <param name="file" value="/home/raymond/websites/postcardit/logs/log4php.log" />
+        <param name="file" value="/var/app/current/logs/log4php.log" />
         <param name="append" value="true" />
     </appender>
 	<logger name="Postcard" additivity="false">
