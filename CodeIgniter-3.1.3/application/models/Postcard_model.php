@@ -15,6 +15,8 @@
  * Added deactivate method.
  * Added delete method.
  * Added get_upload_file method.
+ * @change_history 2017-02-26, February 26, 2017, Added subject parameter to
+ * add method.  Changed name convention (from, to, etc).
  * @status incomplete
  * @todo adjust get_accounts to get_postcards or delete it.
  */
@@ -24,14 +26,16 @@ class Postcard_model extends CI_Model {
 		parent::__construct();
 	}
 
-	public function add($email, $from, $recipient_name, $message) 
+	public function add($from_name, $from_email, $to_name, $to_email, $subject, $message) 
 	{
 		$data = array (
-			'postcard_author'=>$from,
-			'postcard_recipient_email'=>$email,
-			'postcard_recipient_name'=>$recipient_name,
-			'postcard_message'=>$message,
-			'postcard_active'=>'1'
+			'from_name'=>$from_name,
+			'from_email'=>$from_email,
+			'to_name'=>$to_name,
+			'to_email'=>$to_email,
+			'subject'=>$subject,
+			'message'=>$message,
+			'active'=>'1'
 		);
 		$this->load->database();
 		$ins = $this->db->insert_string('postcard', $data);
@@ -48,7 +52,7 @@ class Postcard_model extends CI_Model {
 
 		$this->load->database();
 		$data = array (
-			'postcard_active'=>'1'
+			'active'=>'1'
 		);
 		$where = 'postcard_id='.$postcard_id;
 		$str = $this->db->update_string('postcard', $data, $where);
@@ -64,7 +68,7 @@ class Postcard_model extends CI_Model {
 
 		$this->load->database();
 		$data = array (
-			'postcard_active'=>'0'
+			'active'=>'0'
 		);
 		$where = 'postcard_id='.$postcard_id;
 		$str = $this->db->update_string('postcard', $data, $where);

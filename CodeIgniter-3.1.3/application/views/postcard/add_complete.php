@@ -10,6 +10,8 @@
  * follow the pattern header-content-footer.
  * @todo Fix/clarify purpose.
  * @change_history 2017-02-21, RByczko, Enhanced upload button.
+ * @change_history 2017-02-26, RByczko, Changed interface slightly
+ * to conform to better naming convention (from, to, etc).
  */
 ?>
 <html>
@@ -33,26 +35,20 @@
     <h1>Postcard IT</h1>
     <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
   </div>
-  <div role="main" class="ui-content">
-<div class="subheader">
-<pre>Added email:<?php echo $email; ?></pre>
-<pre>Added from:<?php echo $from; ?></pre>
-</div>
-<div class="menu">
-<div class="menu_choice">
-<div id="add_complete_id" data-role="controlgroup">
-	<a href="<?php echo site_url('postcard/upload_now/'.$id);?>" id="upload_choice" data-role="button">Upload</a>
-</div>
-<a href="/igniter/index.php/reminder/create/<?php echo $id?>"><div id="menu_create">Create</div></a>
-</div><!-- comment
---><div class="menu_choice">
-<a href="/igniter/index.php/reminder/delete/<?php echo 'ai'?>"><div id="menu_delete">Delete</div></a>
-</div><!-- comment
---><div class="menu_choice">
-<a href="/igniter/index.php/account/logout/<?php echo 'ai'?>"><div id="menu_logout">Logout</div></a>
-</div>
-</div>
-</div><!--ui-content-->
+  <div role="main" class="ui-content"><!--ui-content-->
+	<div class="subheader">
+		<pre>ADDED</pre>
+		<pre>From name:<?php echo $from_name; ?></pre>
+		<pre>From email:<?php echo $from_email; ?></pre>
+		<pre>To name:<?php echo $to_name; ?></pre>
+		<pre>To email:<?php echo $to_email; ?></pre>
+		<pre>Subject:<?php echo $subject; ?></pre>
+		<pre>Message:<?php echo $message; ?></pre>
+	</div>
+	<div id="add_complete_id" data-role="controlgroup">
+		<a href="<?php echo site_url('postcard/upload_now/'.$postcard_id);?>" id="upload_choice" data-role="button">Upload</a>
+	</div>
+    </div><!--ui-content-->
 <div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b">
   <a href="cancel" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
   <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
