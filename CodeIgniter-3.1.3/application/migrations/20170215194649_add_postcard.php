@@ -1,5 +1,12 @@
 <?php
 /*
+ * @file 20170215194649_add_postcard.php
+ * @author Raymond Byczko
+ * @company self
+ * @change_history 2017-02-26, February 26, 2017, Change column names.
+ * Modified names to a more uniform convention (to, from, etc).
+ */
+/*
  * This class adds an postcard table to the postcardit web application.
  */
 defined('BASEPATH') or exit('No direct script access allowed');
@@ -14,23 +21,32 @@ class Migration_Add_postcard extends CI_Migration {
 				'unsigned'=>TRUE,
 				'auto_increment'=>TRUE
 			),
-			'postcard_author'=>array(
+			'from_name'=>array(
 				'type'=>'VARCHAR',
 				'constraint'=>'100',
+				'null'=>TRUE
 			),
-			'postcard_recipient_name'=>array(
+			'from_email'=>array(
 				'type'=>'VARCHAR',
 				'constraint'=>'100',
+				'null'=>TRUE
 			),
-			'postcard_recipient_email'=>array(
+			'to_name'=>array(
 				'type'=>'VARCHAR',
 				'constraint'=>'100',
+				'null'=>TRUE
 			),
-			'postcard_message'=>array(
+			'to_email'=>array(
 				'type'=>'VARCHAR',
 				'constraint'=>'100',
+				'null'=>TRUE
 			),
-			'postcard_active'=>array(
+			'message'=>array(
+				'type'=>'VARCHAR',
+				'constraint'=>'100',
+				'null'=>TRUE
+			),
+			'active'=>array(
 				'type'=>'INT'
 			),
 		));

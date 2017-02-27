@@ -25,6 +25,7 @@
  * only roughly.  Needs significant enhancement and cleanup.
  * @change_history RByczko, 2017-02-25, Some cleanup to ajax post call.
  * @change_history RByczko, 2017-02-25, Enhanced ajax post done.
+ * @change_history RByczko, 2017-02-26, Worked on send button.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -78,7 +79,7 @@ var canvas;
 <div id="apply_postcardtext_id" data-role="controlgroup">
 	<a href="#" data-role="button" id="apply_canvas_id">Apply</a>
 	<a href="#" data-role="button" ui-disabled="true" id="save_canvas_id">Save</a>
-	<a href="#" data-role="button" ui-disabled="true" id="send_canvas_id">Send</a>
+	<a href="<?php echo site_url('postcard/send/'.$postcard_id); ?>" data-role="button" ui-disabled="true" id="send_canvas_id">Send</a>
 </div>
 <pre>The postcard/edit.php page here!</pre>
 </div><!-- main -->

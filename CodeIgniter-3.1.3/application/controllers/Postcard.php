@@ -13,6 +13,10 @@
  * @change_history RByczko, 2017-02-23, Added log4php. Added save_postcard.
  * @change_history RByczko, 2017-02-25, Enhance save_postcard.
  * @change_history RByczko, 2017-02-25, Add json return for save_postcard.
+ * @change_history RByczko, 2017-02-26, Add subject to add method.
+ * @change_history RByczko, 2017-02-26, Change naming convention app wide (from, to, etc).
+ * @change_history RByczko, 2017-02-26, Added static method send_postcard.
+ * Also added: send, send_postcard_ajax
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup, especially save_postcard.
  * However, at least I am able to see the _POST parameters.
@@ -23,6 +27,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 require_once('Logger.php');
+require_once('PHPMailer-master/PHPMailerAutoload.php');
+require_once('config/mailerconfig.php');
+
 Logger::configure('../postcarditlog4php.xml');
 
 class Postcard extends CI_Controller {
@@ -105,6 +112,69 @@ class Postcard extends CI_Controller {
 		return '/img/sent_80x80/';
 	}
 
+	/*
+	 * This static method utilizes a PHPMailer class object that
+	 * sets up the email, attaches the edited image, and sends it.
+	 */
+	static public function send_postcard(
+		$from_email,
+		$from_name,
+		$to_name,
+		$to_email,
+		$subject,
+		$message,
+		$inprocess_path_name)
+	{
+		date_default_timezone_set('Etc/UTC');
+
+		//Create a new PHPMailer instance
+		$mail = new PHPMailer;
+		//Tell PHPMailer to use SMTP
+		$mail->isSMTP();
+		//Enable SMTP debugging
+		// 0 = off (for production use)
+		// 1 = client messages
+		// 2 = client and server messages
+		$mail->SMTPDebug = $mailerconfig['SMTPDebug'];
+		//Ask for HTML-friendly debug output
+		$mail->Debugoutput = 'html';
+		//Set the hostname of the mail server
+		$mail->Host = $mailerconfig['Host'];
+		//Set the SMTP port number - likely to be 25, 465 or 587
+		$mail->Port = $mailerconfig['Port'];
+		//Whether to use SMTP authentication
+		$mail->SMTPAuth = $mailerconfig['SMTPAuth'];
+		//Username to use for SMTP authentication
+		$mail->Username = $mailerconfig['Username'];
+		//Password to use for SMTP authentication
+		$mail->Password = $mailer['Password'];
+		//Set who the message is to be sent from
+		$mail->setFrom($from_email, $from_name);
+		//Set an alternative reply-to address
+		// @todo adjust reply
+$mail->addReplyTo('raymondbyczko@att.net', 'Ray Byczko');
+		//Set who the message is to be sent to
+		$mail->addAddress($to_email, $to_name);
+		//Set the subject line
+		$mail->Subject = $subject;
+//Read an HTML message body from an external file, convert referenced images to embedded,
+//convert HTML into a basic plain-text alternative body
+// $mail->msgHTML(file_get_contents('contents.html'), dirname(__FILE__));
+
+$mail->msgHTML('<pre>Some HTML</pre>');
+		//Replace the plain text body with one created manually
+		$mail->AltBody = $message;
+		//Attach an image file
+		$mail->addAttachment($inprocess_path_name);
+
+		//send the message, check for errors
+		if (!$mail->send()) {
+			echo "Mailer Error: " . $mail->ErrorInfo;
+		} else {
+			echo "Message sent!";
+		}
+	}
+
 	/* 
 	 * @purpose To initially specify the postcard by uploading/taking a picture.
 	 * A new postcard record is added to the database.
@@ -119,9 +189,11 @@ class Postcard extends CI_Controller {
 		}
 		$this->load->helper(array('form','url'));
 		$this->load->library('form_validation');
-		$this->form_validation->set_rules('email', 'Email', 'required');
-		$this->form_validation->set_rules('from', 'Postcard author', 'required');
-		$this->form_validation->set_rules('recipient', 'Postcard recipient', 'required');
+		$this->form_validation->set_rules('from_name', 'From name', 'required');
+		$this->form_validation->set_rules('from_email', 'From email', 'required');
+		$this->form_validation->set_rules('to_name', 'Recipient name', 'required');
+		$this->form_validation->set_rules('to_email', 'Recipient email', 'required');
+		$this->form_validation->set_rules('subject', 'Subject', 'required');
 		$this->form_validation->set_rules('message', 'Postcard message', 'required');
 
 		if ($this->form_validation->run() == FALSE)
@@ -131,9 +203,11 @@ class Postcard extends CI_Controller {
 		else
 		{
 			// @todo use isset on post vars
-			$email = $_POST['email'];
-			$from = $_POST['from'];
-			$recipient = $_POST['recipient'];
+			$from_name = $_POST['from_name'];
+			$from_email = $_POST['from_email'];
+			$to_name = $_POST['to_name'];
+			$to_email = $_POST['to_email'];
+			$subject = $_POST['subject'];
 			$message = $_POST['message'];
 			/*
 			$data = array(
@@ -145,14 +219,16 @@ class Postcard extends CI_Controller {
 			*/
 			// Create the postcard here.
 			$this->load->model('Postcard_model','', TRUE);
-			$id = $this->Postcard_model->add($email, $from, $recipient, $message);
+			$id = $this->Postcard_model->add($from_name, $from_email, $to_name, $to_email, $subject, $message);
 
 			$data = array(
-							'email'=>$email,
-							'from'=>$from,
-							'recipient'=>$recipient,
+							'from_name'=>$from_name,
+							'from_email'=>$from_email,
+							'to_name'=>$to_name,
+							'to_email'=>$to_email,
+							'subject'=>$subject,
 							'message'=>$message,
-							'id'=>$id
+							'postcard_id'=>$id
 						);
 			$this->load->view('postcard/add_complete', $data);
 
@@ -316,6 +392,71 @@ class Postcard extends CI_Controller {
 	 */
 	public function send($postcard_id)
 	{
-		$this->load->view('postcard/send');
+
+		$this->m_log->trace('Postcard::send called');
+		$this->m_log->trace('... postcard_id='.$postcard_id);
+		$this->load->model('Postcard_model','', TRUE);
+		$query = $this->Postcard_model->get_postcard($postcard_id);
+		$upload_file = $query[0]->postcard_upload_file;
+		$inprocess_path_name = '.'.Postcard::inprocess_dir().$upload_file;
+
+		$this->m_log->trace('...inprocess_path_name='.$inprocess_path_name);
+		$data = array(
+			'inprocess_path_name'=>$inprocess_path_name
+		);
+		$this->load->view('postcard/send', $data);
+	}
+	
+	/*
+	 * This method is actually mean to be called as a post, and is an ajax call back.
+	 * However, it may not use many POST parameters, since the postcard_id can be used
+	 * to retrieve relevant info from the database.
+	 */
+	public function send_postcard_ajax($postcard_id, $use_post)
+	{
+
+		$from_email = '';
+		$from_name = '';
+		$to_name = '';
+		$to_email = '';
+		$subject = '';
+		$message = '';
+		$inprocess_path_name = '';
+
+		if ($use_post == 1)
+		{
+			// USE POST MECHANISM.
+			$from_email = $_POST['from_email'];
+			$from_name = $_POST['from_name'];
+			$to_name = $_POST['to_name'];
+			$to_email = $_POST['to_email'];
+			$subject = $_POST['subject'];
+			$message = $_POST['message'];
+			$inprocess_path_name = $_POST['inprocess_path_name'];
+		}
+		else
+		{
+			// USE DATABASE
+			$query = $this->Postcard_model->get_postcard($postcard_id);
+			$from_email = '';
+			$from_name =  $query[0]->postcard_author;
+			$to_name = $query[0]->postcard_recipient_name;
+			$to_email = $query[0]->postcard_recipient_email;
+			$subject = $query[0]->postcard_subject;
+			$message = $query[0]->postcard_message;
+			$upload_file = $query[0]->postcard_upload_file;
+			$inprocess_path_name = '.'.Postcard::inprocess_dir().$upload_file;
+
+		}
+
+		Postcard::send_postcard(
+			$from_email,
+			$from_name,
+			$to_name,
+			$to_email,
+			$subject,
+			$message,
+			$inprocess_path_name
+		);
 	}
 }

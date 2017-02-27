@@ -7,7 +7,8 @@
  * (It also goes by another name, "GetInfo".) It starts the process by
  * presenting a form to grab initial postcard details.  See p. 30 of Diary #8.
  * @start_date 2017-02-16
- * @change_history RByczko
+ * @change_history RByczko, 2017-02-26, Added subject. Change name convention
+ * for relevant form (database etc) values (from, to, etc).
  * @todo I think I need to add a data-role (JQuery) of 'content' to follow
  * the header-content-footer pattern.
  */
@@ -38,14 +39,18 @@
 </div>
 <?php echo validation_errors(); ?>
 <?php echo form_open('postcard/add'); ?>
-<h5>Email:</h5>
-<input type="text" name="email" value="" size="50" />
-<h5>From:</h5>
-<input type="text" name="from" value="" size="50" />
-<h5>To:</h5>
-<input type="text" name="recipient" value="" size="50" />
+<h5>From Name:</h5>
+<input type="text" name="from_name" value="" size="50" />
+<h5>From Email:</h5>
+<input type="text" name="from_email" value="" size="50" />
+<h5>To Name:</h5>
+<input type="text" name="to_name" value="" size="50" />
+<h5>To Email:</h5>
+<input type="text" name="to_email" value="" size="50" />
 <h5>Message:</h5>
 <input type="text" name="message" value="" size="50" />
+<h5>Subject:</h5>
+<input type="text" name="subject" value="" size="50" />
 <hr></hr>
 <div><input type="submit" value="Submit" /></div>
 </form>
