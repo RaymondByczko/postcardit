@@ -16,6 +16,7 @@
  * @change_history RByczko, 2017-02-26, Add subject to add method.
  * @change_history RByczko, 2017-02-26, Change naming convention app wide (from, to, etc).
  * @change_history RByczko, 2017-02-26, Added static method send_postcard.
+ * @change_history RByczko, 2017-02-27, Fix method send.
  * Also added: send, send_postcard_ajax
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup, especially save_postcard.
@@ -402,7 +403,8 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 
 		$this->m_log->trace('...inprocess_path_name='.$inprocess_path_name);
 		$data = array(
-			'inprocess_path_name'=>$inprocess_path_name
+			'inprocess_path_name'=>$inprocess_path_name,
+			'postcard_id'=>$postcard_id
 		);
 		$this->load->view('postcard/send', $data);
 	}
