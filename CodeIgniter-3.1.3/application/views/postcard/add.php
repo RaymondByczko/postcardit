@@ -10,6 +10,10 @@
  * @change_history RByczko, 2017-02-26, Added subject. Change name convention
  * for relevant form (database etc) values (from, to, etc).
  * @change_history RByczko, 2017-02-28, Correct home button href. Added 'Help?'.
+ * @change_history RByczko, 2017-03-01, Commented out Up, Down because they
+ * are not needed.
+ * @change_history RByczko, 2017-03-01, Added set_value calls to form. Trying
+ * to fix Previous blue in Add complete step. It did not seem to work. Removed.
  * @todo I think I need to add a data-role (JQuery) of 'content' to follow
  * the header-content-footer pattern.
  */
@@ -29,7 +33,7 @@
 </style>-->
 </head>
 <body>
-<div data-role="page" data-fullscreen="true">
+<div id="page_add" data-role="page" data-dom-cache="true" data-fullscreen="true">
   <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b">
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <a href="info" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">Information</a>
@@ -39,7 +43,7 @@
 <pre>Hi - Please add your postcard!</pre>
 </div>
 <?php echo validation_errors(); ?>
-<?php echo form_open('postcard/add'); ?>
+<?php echo form_open('postcard/add'/*, array('data-dom-cache'=>"false")*/); ?>
 <h5>From Name:</h5>
 <input type="text" name="from_name" value="" size="50" />
 <h5>From Email:</h5>
@@ -59,16 +63,23 @@
 <div data-role="collapsible">
 	<h2>Help ?</h2>
 	<p>This is the first step to making a postcard.
+	First, details on the email you want to send are asked for.
 	Enter the 'from' and 'to' details and click the
 	submit button.  After you submit, you will be
 	asked to pick an image on your computer and upload it.
 	</p>
+	<p>
+    Cancel is not enabled because you have not added anything
+	yet, until you click Submit.
+	</p>
 </div>
 <pre>The postcard/add.php page here!</pre>
-<div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b">
-  <a href="cancel" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
+<div data-role="footer"  class="ui-bar" data-position="fixed" data-theme="b">
+  <a href="<?php echo site_url('welcomepostcard/index'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus ui-disabled">Cancel</a>
+  <!-- REM BUTTONS
   <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-arrow-u">Up</a>
   <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-arrow-d">Down</a>
+  REM BUTTONS -->
 </div>
 </div>
 </body>
