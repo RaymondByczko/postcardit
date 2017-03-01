@@ -10,6 +10,7 @@
  *		'send postcard' button
  * @start_date 2017-02-26
  * @change_history RByczko, 2017-02-26 February 26, 2017, Started this file.
+ * @change_history, 2017-02-28, RByczko, Correct home button href. Added 'Help?'.
  * @todo I think I need to add a data-role (JQuery) of 'content' to follow
  * the header-content-footer pattern.
  */
@@ -31,7 +32,7 @@
 <body>
 <div data-role="page" data-fullscreen="true">
   <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!--header-->
-    <a href="home" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <a href="<?php echo site_url('welcomepostcardit/index'); ?>" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <a href="info" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">Information</a>
     <h1>Postcard IT</h1>
   </div><!--header-->
@@ -44,6 +45,12 @@
 		<img style="width:30%" src="<?php echo base_url($inprocess_path_name);?>">
 		</div><!-- EE -->
 
+		<div data-role="collapsible">
+			<h2>Help ?</h2>
+			<p>At this point your postcard with the modified image has
+			been sent.
+			</p>
+		</div>
 		<pre>The postcard/send.php page here!</pre>
 	</div><!--content-->
 	<div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b"><!--footer-->

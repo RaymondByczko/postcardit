@@ -12,6 +12,7 @@
  * in content area (that is, edit).  Also corrected links in footer.
  * @change_history, 2017-02-21, RByczko, Adjust Edit button.
  * @change_history, 2017-02-21, RByczko, Put uploaded pic into upload_complete.
+ * @change_history, 2017-02-28, RByczko, Correct home button href. Added 'Help?'.
  */
 ?>
 <html>
@@ -30,7 +31,7 @@
 <body class="mybody">
 <div data-role="page" id="page1" data-fullscreen="true"><!-- page -->
   <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
-    <a href="home" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <a href="<?php echo site_url('welcomepartcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
     <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
   </div><!-- header -->
@@ -54,6 +55,14 @@
 <a href="/igniter/index.php/reminder/delete/<?php echo 'ai'?>"><div id="menu_delete">Delete</div></a>
 </div><!-- comment
 -->
+</div>
+
+<div data-role="collapsible">
+	<h2>Help ?</h2>
+	<p>At this point you have uploaded your image to postcardit.
+	Now click the edit button to allow you to edit your image
+	on your browser.
+	</p>
 </div>
 </div><! -- main -->
 <div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->

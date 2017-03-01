@@ -2,6 +2,19 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /*
+ * @file routes.php
+ * @location application/config/
+ * @author Raymond Byczko
+ * @company self
+ * @start_date
+ * @note This file is part of the original install of CodeIgniter-3.1.3.
+ * @note It is modified to adjust the default controller (route) for a more custum
+ * welcome page (i.e. first page) for the postcardit website.
+ * @change_history 2017-02-28, RByczko, Changed default controller from
+ * welcome to welcomepostcardit.
+ */
+
+/*
 | -------------------------------------------------------------------------
 | URI ROUTING
 | -------------------------------------------------------------------------
@@ -49,6 +62,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+
+// $route['default_controller'] = 'welcome';
+$route['default_controller'] = 'welcomepostcardit';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;

@@ -26,6 +26,7 @@
  * @change_history RByczko, 2017-02-25, Some cleanup to ajax post call.
  * @change_history RByczko, 2017-02-25, Enhanced ajax post done.
  * @change_history RByczko, 2017-02-26, Worked on send button.
+ * @change_history RByczko, 2017-02-28, Correct home button href. Added 'Help?'.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  */
@@ -52,7 +53,7 @@ var canvas;
 <body class="mybody">
 <div data-role="page" id="page_e" data-fullscreen="true" style="height:100%"><!-- page -->
   <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
-    <a href="home" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+    <a href="<?php site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
     <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
   </div><!-- header -->
@@ -80,6 +81,18 @@ var canvas;
 	<a href="#" data-role="button" id="apply_canvas_id">Apply</a>
 	<a href="#" data-role="button" ui-disabled="true" id="save_canvas_id">Save</a>
 	<a href="<?php echo site_url('postcard/send/'.$postcard_id); ?>" data-role="button" ui-disabled="true" id="send_canvas_id">Send</a>
+</div>
+
+<div data-role="collapsible">
+	<h2>Help ?</h2>
+	<p>Your are now presented a copy of your uploaded image on
+	a local canvas.  Type in some text into the entry field and
+	click apply.  Upon applying the text, the canvas will be modified.
+	You can then save the canvas image.  Clicking save will save it
+	to the server.  Then, finally, upon it successfully being saved,
+	you can send it.  Each button will go from disabled to enabled
+	as it makes sense for the process.
+	</p>
 </div>
 <pre>The postcard/edit.php page here!</pre>
 </div><!-- main -->
