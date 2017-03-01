@@ -64,7 +64,7 @@
 		</p>
 	</div>
     </div><!--ui-content-->
-<div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b">
+<div data-role="footer" data-fullscreen="true" ddata-id="2_postcard_footer" class="ui-bar" data-position="fixed" data-theme="b">
   <a href="<?php echo site_url('postcard/cancel/'.$postcard_id);?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
   <!--<a href="http://postcardit.dev/index.php/postcard/add" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right">Redo</a>
 -->

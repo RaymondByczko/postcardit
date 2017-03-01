@@ -39,6 +39,7 @@
     <a href="info" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">Information</a>
     <h1>Postcard IT</h1>
   </div>
+  <div role="main" class="ui-content"><!--ui-content-->
 <div class="subheader">
 <pre>Hi - Please add your postcard!</pre>
 </div>
@@ -74,7 +75,9 @@
 	</p>
 </div>
 <pre>The postcard/add.php page here!</pre>
-<div data-role="footer"  class="ui-bar" data-position="fixed" data-theme="b">
+
+</div><!--ui-content-->
+<div data-role="footer" data-fullscreen="true" ddata-id="1_postcard_footer"  class="ui-bar" data-position="fixed" data-theme="b">
   <a href="<?php echo site_url('welcomepostcard/index'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus ui-disabled">Cancel</a>
   <!-- REM BUTTONS
   <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-arrow-u">Up</a>
