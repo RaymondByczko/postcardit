@@ -17,6 +17,9 @@
  * @change_history RByczko, 2017-02-26, Change naming convention app wide (from, to, etc).
  * @change_history RByczko, 2017-02-26, Added static method send_postcard.
  * @change_history RByczko, 2017-02-27, Fix method send.
+ * @change_history RByczko, 2017-02-28, Enhance add method with try-catch.
+ * @change_history RByczko, 2017-03-01, Add cancel method (which will delete a postcard
+ * in the process of it being made).
  * Also added: send, send_postcard_ajax
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup, especially save_postcard.
@@ -176,14 +179,25 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		}
 	}
 
+
+	/*
+	 * generate_unique_id generates a unique number.
+	 * time is sufficient for a prototype site.
+	 * @todo improve uniqueness with random number.
+	 */
+	public static function generate_unique_id()
+	{
+		return time();
+	}
+
 	/* 
 	 * @purpose To initially specify the postcard by uploading/taking a picture.
 	 * A new postcard record is added to the database.
 	 */
-	public function add()
+	public function _add()
 	{
 
-		$this->m_log->trace('Postcard::add called');
+		$this->m_log->trace('Postcard::_add called');
 		if (! file_exists(APPPATH.'/views/postcard/add.php'))
 		{
 			show_404();
@@ -199,10 +213,14 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 
 		if ($this->form_validation->run() == FALSE)
 		{
+
+			$this->m_log->trace('... form_validation returns FALSE');
 			$this->load->view('postcard/add');
 		}
 		else
 		{
+			$this->m_log->trace('... form_validation returns TRUE');
+
 			// @todo use isset on post vars
 			$from_name = $_POST['from_name'];
 			$from_email = $_POST['from_email'];
@@ -210,6 +228,14 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$to_email = $_POST['to_email'];
 			$subject = $_POST['subject'];
 			$message = $_POST['message'];
+
+			$this->m_log->trace('... from_name='.$from_name);
+			$this->m_log->trace('... from_email='.$from_email);
+			$this->m_log->trace('... to_name='.$to_name);
+			$this->m_log->trace('... to_email='.$to_email);
+			$this->m_log->trace('... subject='.$subject);
+			$this->m_log->trace('... message='.$message);
+
 			/*
 			$data = array(
 							'email'=>$email,
@@ -235,6 +261,50 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 
 		}
 		// echo 'Postcard add called';
+	}
+
+	public function add()
+	{
+		try {
+			$this->_add();
+		}
+		catch (Exception $e)
+		{
+			$unique_id = Postcard::generate_unique_id();
+			$message=$e->getMessage();
+			$file=$e->getFile();
+			$line=$e->getLine();
+			$trace=$e->getTrace();
+
+			$this->m_log->trace('Postcard::_add exception START');
+			$this->m_log->trace('... unique_id='.$unique_id);
+			$this->m_log->trace('... message='.$message);
+			$this->m_log->trace('... file='.$file);
+			$this->m_log->trace('... line='.$line);
+			$this->m_log->trace('... trace='.$trace);
+			$this->m_log->trace('Postcard::_add exception END');
+
+/*
+			$data = array(
+				'message'=>$e->getMessage(),
+				'file'=>$e->getFile(),
+				'line'=>$e->getLine(),
+				'trace'=>$e->getTrace()
+			);
+*/
+			$data = array(
+				'unique_id'=>$unique_id,
+				'message'=>'Please check log trace looking for unique_id:'.$unique_id
+			);
+			$this->load->view('postcard/exception', $data);
+		}
+	}
+	
+	public function madd_redirect()
+	{
+
+		$this->m_log->trace('Postcard::add_redirect called');
+		// redirect('postcard/add', 'refresh');
 	}
 
 	public function upload_now($postcard_id)
@@ -263,6 +333,8 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		}
 		else
 		{
+
+			$this->load->helper('url');
 			$data_file_uploaded = $this->upload->data();
 			$upload_file = $data_file_uploaded['file_name'];
 
@@ -461,4 +533,35 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$inprocess_path_name
 		);
 	}
+///ST
+	/*
+	 * @purpose To allow cancelling (i.e. removal) of a specific postcard given its postcard_id.
+	 */
+	public function cancel($postcard_id)
+	{
+
+		$this->m_log->trace('Postcard::cancel called');
+		$this->m_log->trace('...postcard_id='.$postcard_id);
+		$this->load->model('Postcard_model','', TRUE);
+		// $id = $this->Postcard_model->delete($postcard_id);
+
+		$query = $this->Postcard_model->get_upload_file($postcard_id);
+		$upload_file = $query[0]->postcard_upload_file;
+		$upload_path_name = Postcard::uploads_dir().$upload_file;
+
+		$this->m_log->trace('... upload_path_name='.$upload_path_name);
+
+		$exists_upload = file_exists($upload_path_name);
+
+		$this->m_log->trace('... exists_upload='.$exists_upload);
+
+		$this->Postcard_model->delete($postcard_id);
+
+
+		$data = array('postcard_id'=>$postcard_id, 'upload_file'=>$upload_file);
+		// @todo need to inform user of postcard deletion (maybe via dialog).
+		$this->load->view('welcomepostcardit/welcome', $data);
+
+	}
+///EN
 }

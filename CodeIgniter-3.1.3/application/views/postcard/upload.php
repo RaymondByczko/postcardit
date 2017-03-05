@@ -58,9 +58,9 @@
 </div>
 <pre>The postcard/upload.php page here!</pre>
 </div><!-- main -->
-<div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
+<div data-role="footer" ddata-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
   <a href="<?php echo site_url('postcard/cancel/'.$id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
-  <a href="<?php echo site_url('postcard/add/'.$id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
+  <a href="<?php echo site_url('postcard/add'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
 </div><!-- footer -->
 </div><!-- page -->
 </body>
