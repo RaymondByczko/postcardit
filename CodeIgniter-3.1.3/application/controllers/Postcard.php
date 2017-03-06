@@ -24,6 +24,8 @@
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup, especially save_postcard.
  * However, at least I am able to see the _POST parameters.
+ * @change_history 2017-03-05, March 5, 2017. Adjust loading of helpers.
+ * Cleanup.
  */
 ?>
 <?php
@@ -236,14 +238,6 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$this->m_log->trace('... subject='.$subject);
 			$this->m_log->trace('... message='.$message);
 
-			/*
-			$data = array(
-							'email'=>$email,
-							'from'=>$from,
-							'recipient'=>$recipient,
-							'message'=>$message
-						);
-			*/
 			// Create the postcard here.
 			$this->load->model('Postcard_model','', TRUE);
 			$id = $this->Postcard_model->add($from_name, $from_email, $to_name, $to_email, $subject, $message);
@@ -300,13 +294,6 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		}
 	}
 	
-	public function madd_redirect()
-	{
-
-		$this->m_log->trace('Postcard::add_redirect called');
-		// redirect('postcard/add', 'refresh');
-	}
-
 	public function upload_now($postcard_id)
 	{
 		$this->m_log->trace('Postcard::upload called');
@@ -319,9 +306,7 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		$config['max_height']	=  '1024';
 		// $config['file_name'] = 'renamed.jpg';
 
-
-		$this->load->helper('form');
-		$this->load->helper('url');
+		$this->load->helper(array('url', 'form'));
 		$this->load->library('upload', $config);
 		// $this->load->helper(array('form','url'));
 		if ( $this->upload->do_upload("userfile") == FALSE)
@@ -334,7 +319,7 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		else
 		{
 
-			$this->load->helper('url');
+			// $this->load->helper(array('url'));
 			$data_file_uploaded = $this->upload->data();
 			$upload_file = $data_file_uploaded['file_name'];
 
@@ -345,7 +330,7 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			// $upload_file = $query[0]->postcard_upload_file;
 			$upload_path_name = Postcard::uploads_dir().$upload_file;
 
-			$data = array('upload_data' => $data_file_uploaded, 'upload_path_name'=>$upload_path_name, 'id'=>$postcard_id);
+			$data = array('upload_data' => $data_file_uploaded, 'upload_path_name'=>$upload_path_name, 'postcard_id'=>$postcard_id);
 
 			$this->load->view('postcard/upload_complete', $data);
 			// return TRUE;
@@ -533,7 +518,7 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$inprocess_path_name
 		);
 	}
-///ST
+
 	/*
 	 * @purpose To allow cancelling (i.e. removal) of a specific postcard given its postcard_id.
 	 */
@@ -563,5 +548,4 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		$this->load->view('welcomepostcardit/welcome', $data);
 
 	}
-///EN
 }

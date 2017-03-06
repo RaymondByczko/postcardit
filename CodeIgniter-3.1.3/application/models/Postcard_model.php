@@ -17,17 +17,38 @@
  * Added get_upload_file method.
  * @change_history 2017-02-26, February 26, 2017, Added subject parameter to
  * add method.  Changed name convention (from, to, etc).
+ * @change_history 2017-03-01, March 1, 2017, Added log4php logging.
  * @status incomplete
  * @todo adjust get_accounts to get_postcards or delete it.
+ * @change_history 2017-03-05, March 5, 2017. Adjust loading of helpers.
  */
+
+require_once('Logger.php');
+
 class Postcard_model extends CI_Model {
+
+
+	// These private members support 'apache log4php'.
+	private $m_cc_dot=null;
+	private $m_log=null;
+
 	public function __construct()
 	{
 		parent::__construct();
+
+		/* Setup 'apache log4php' */
+		$cc = get_called_class();
+		$this->m_cc_dot = str_replace("\\", ".", $cc);
+		$this->m_log = \Logger::getLogger($this->m_cc_dot);
+		$this->m_log->trace('Postcard_model contructor called');
+		$this->m_log->trace('...logger name='.$this->m_cc_dot);
 	}
 
 	public function add($from_name, $from_email, $to_name, $to_email, $subject, $message) 
 	{
+
+		$this->m_log->trace('Postcard_model::add called');
+
 		$data = array (
 			'from_name'=>$from_name,
 			'from_email'=>$from_email,
@@ -39,9 +60,12 @@ class Postcard_model extends CI_Model {
 		);
 		$this->load->database();
 		$ins = $this->db->insert_string('postcard', $data);
+		$this->m_log->trace('... ins='.$ins);
 		$query = $this->db->query($ins);
 		$id = $this->db->insert_id();
 		// @todo return associate array with query, id keys.
+
+		$this->m_log->trace('Postcard_model::add return');
 		return $id;
 	}
 	/*
