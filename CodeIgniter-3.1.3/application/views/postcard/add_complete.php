@@ -12,7 +12,14 @@
  * @change_history 2017-02-21, RByczko, Enhanced upload button.
  * @change_history 2017-02-26, RByczko, Changed interface slightly
  * @change_history 2017-02-28, RByczko, Correct home button href. Added 'Help?'.
+ * @change_history 2017-03-01, RByczko, Fixed Cancel button. Adjusted 'Help?'.
+ * Updated 'Previous' button. @todo Previous will go back to postcard/add
+ * but the relevant postcard_id will be lost. A new submit on the add wil
+ * generate a new postcard record.  However, an incomplete record will be sitting
+ * around.
  * to conform to better naming convention (from, to, etc).
+ * @change_history 2017-03-05, RByczko, Added header, content comment markers.
+ * Cleaned up footer.
  */
 ?>
 <html>
@@ -30,12 +37,12 @@
 </style>
 <!-- @todo decide on class for body -->
 <body class="mybody">
-<div data-role="page" id="page1" data-fullscreen="true"><!-- page -->
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b">
+<div data-role="page" data-dom-cache="false" id="page_add_complete" data-fullscreen="true"><!-- page -->
+  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!--header-->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
     <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
-  </div>
+  </div><!-- header-->
   <div role="main" class="ui-content"><!--ui-content-->
 	<div class="subheader">
 		<pre>ADDED</pre>
@@ -47,21 +54,22 @@
 		<pre>Message:<?php echo $message; ?></pre>
 	</div>
 	<div id="add_complete_id" data-role="controlgroup">
-		<a href="<?php echo site_url('postcard/upload_now/'.$postcard_id);?>" id="upload_choice" data-role="button">Upload</a>
+		<a href="<?php echo site_url('postcard/upload_now/'.$postcard_id);?>" data-ajax="false" id="upload_choice" data-role="button">Upload</a>
 	</div>
 	<div data-role="collapsible">
 		<h2>Help ?</h2>
 		<p>The information you entered on the form is indicated above.
 		Now you can go ahead and upload an image to the server, so
 		you can then modify it, and send it as a postcard.
-		Click Upload to proceed!
+		Click Upload to proceed!  If you wish to cancel making this
+		card, click Cancel.  It will delete the card.
 		</p>
 	</div>
     </div><!--ui-content-->
-<div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b">
-  <a href="cancel" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
-  <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
-</div>
+<div data-role="footer" data-fullscreen="true" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer -->
+	<a href="<?php echo site_url('postcard/cancel/'.$postcard_id);?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
+	<a href="<?php echo site_url('postcard/add');?>" id="redo_button_id" data-role="button">Previous</a>
+</div><!--footer-->
 </div><!--page-->
 </body>
 </html>

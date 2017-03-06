@@ -29,6 +29,8 @@
  * @change_history RByczko, 2017-02-28, Correct home button href. Added 'Help?'.
  * @status @todo partial draft, needs testing, enhancement
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
+ * @change_history RByczko, 2017-03-05, Removed data-id from footer, its not
+ * required to be persistent at this time.  Added data-ajax false to Previous link.
  */
 ?>
 <!DOCTYPE hmtl>
@@ -96,9 +98,9 @@ var canvas;
 </div>
 <pre>The postcard/edit.php page here!</pre>
 </div><!-- main -->
-<div data-role="footer" data-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
+<div data-role="footer" ddddata-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
   <a href="<?php echo site_url('postcard/cancel/'.$postcard_id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
-  <a href="<?php echo site_url('postcard/upload_now/'.$postcard_id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
+  <a href="<?php echo site_url('postcard/upload_now/'.$postcard_id); ?>" data-ajax="false" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
 </div><!-- footer -->
 <script>
 console.log("pageinit_bind");
