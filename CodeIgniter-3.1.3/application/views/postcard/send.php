@@ -11,8 +11,10 @@
  * @start_date 2017-02-26
  * @change_history RByczko, 2017-02-26 February 26, 2017, Started this file.
  * @change_history, 2017-02-28, RByczko, Correct home button href. Added 'Help?'.
+ * @change_history, 2017-03-01, RByczko, Fix Cancel button.  Update 'Help?'.
  * @todo I think I need to add a data-role (JQuery) of 'content' to follow
  * the header-content-footer pattern.
+ * @change_history, 2017-03-05, RByczko, Adjust footer (add New).
  */
 ?>
 <!DOCTYPE hmtl>
@@ -48,15 +50,15 @@
 		<div data-role="collapsible">
 			<h2>Help ?</h2>
 			<p>At this point your postcard with the modified image has
-			been sent.
+			been sent. If you wish to cancel making this card, click Cancel.
+			It will delete the card.
 			</p>
 		</div>
 		<pre>The postcard/send.php page here!</pre>
 	</div><!--content-->
 	<div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b"><!--footer-->
-	  <a href="cancel" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
-	  <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-arrow-u">Up</a>
-	  <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-arrow-d">Down</a>
+	  <a href="<?php echo site_url('postcard/cancel/'.$postcard_id);?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
+	  <a href="<?php echo site_url('postcard/add/'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">New</a>
 	</div><!--footer-->
 </div>
 </body>

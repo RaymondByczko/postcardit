@@ -13,6 +13,14 @@
  * @change_history, 2017-02-21, RByczko, Adjust Edit button.
  * @change_history, 2017-02-21, RByczko, Put uploaded pic into upload_complete.
  * @change_history, 2017-02-28, RByczko, Correct home button href. Added 'Help?'.
+ * @change_history, 2017-03-05, RByczko, Previous button should not link to
+ * controller url for processing form. It should link to page that presents the
+ * form, that is upload_now. 
+ * @change_history, 2017-03-05, RByczko, Cleaned up meta, empty style, assigned
+ * Removed class mybody from body.  @todo decide on body class later.
+ * Used postcard_id instead of id. Used echo before call to site_url.
+ * @important Use echo before site_url (site_url is a codeigniter artifact).
+ * unique id to page.
  */
 ?>
 <!DOCTYPE html>
@@ -21,16 +29,13 @@
 <title>You have uploaded a Postcard!</title>
 <!--<link rel="stylesheet" href="/css/sheets/remindmestyles.css?version=0.2"> -->
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" type="text/css" href="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.css" />
 <script type="text/javascript" src="/JQuery_1_12_4/jquery-1.12.4.js"></script>
 <script type="text/javascript" src="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.js"></script>
 </head>
-<style>
-</style>
-
-<body class="mybody">
-<div data-role="page" id="page1" data-dom-cache="true" data-fullscreen="true"><!-- page -->
+<body>
+<div data-role="page" id="page_upload_complete_id" data-dom-cache="true" data-fullscreen="true"><!-- page -->
   <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
@@ -38,7 +43,7 @@
   </div><!-- header -->
   <div role="main" class="ui-content"><!-- main -->
 <div class="subheader">
-<pre>Added postcard id:<?php echo $id; ?></pre>
+<pre>Added postcard id:<?php echo $postcard_id; ?></pre>
 <pre>Added file size:<?php echo $upload_data['file_size']; ?></pre>
 </div>
 <div style="height:20%"><!-- EE -->
@@ -46,9 +51,8 @@
 <img style="width:30%" src="<?php echo base_url($upload_path_name);?>">
 </div><!-- EE -->
 <div id="upload_complete_id" data-role="controlgroup">
-	<a href="<?php echo site_url('postcard/edit/'.$id);?>" id="edit_choice" data-role="button">Edit</a>
+	<a href="<?php echo site_url('postcard/edit/'.$postcard_id);?>" id="edit_choice" data-role="button">Edit</a>
 </div>
-
 <div data-role="collapsible">
 	<h2>Help ?</h2>
 	<p>At this point you have uploaded your image to postcardit.
@@ -57,9 +61,10 @@
 	</p>
 </div>
 </div><!-- main -->
-<div data-role="footer" ddata-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
-  <a href="<?php site_url('postcard/cancel/'.$id);?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
-  <a href="<?php site_url('postcard/upload_now/'.$id);?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previousssss-uplcom</a>
+<div data-role="footer" data-fullscreen="true" data-position="fixed" data-theme="b"><!-- footer -->
+  <a href="<?php echo site_url('postcard/cancel/'.$postcard_id); ?>" data-ajax="false" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
+  <!-- DONT FORGET THE ECHO BEFORE site_url -->
+  <a href="<?php echo site_url('postcard/upload_now/'.$postcard_id);?>" data-ajax="false" class="ui-btn ui-corner-all ui-shadow" id="previous_uploadnow_id" >Previous</a>
 </div><!-- footer -->
 </div><!-- page -->
 </body>

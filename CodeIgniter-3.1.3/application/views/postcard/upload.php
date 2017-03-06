@@ -12,6 +12,8 @@
  * why the form does not work properly.
  * @change_history RByczko,2017-02-20, Added site_url to footer.  Removed commented
  * @change_history, 2017-02-28, RByczko, Correct home button href. Added 'Help?'.
+ * @change_history, 2017-03-05, RByczko, Gave page a unique id.  Removed data-id
+ * (no persistent footer required at this time).
  * out code
  */
 ?>
@@ -30,7 +32,7 @@
 </style>
 </head>
 <body class="mybody">
-<div data-role="page" id="page1" data-fullscreen="true"><!-- page -->
+<div data-role="page" id="page_upload_id" data-fullscreen="true"><!-- page -->
   <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
@@ -58,7 +60,7 @@
 </div>
 <pre>The postcard/upload.php page here!</pre>
 </div><!-- main -->
-<div data-role="footer" ddata-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
+<div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
   <a href="<?php echo site_url('postcard/cancel/'.$id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
   <a href="<?php echo site_url('postcard/add'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
 </div><!-- footer -->
