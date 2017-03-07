@@ -20,9 +20,12 @@
  * @change_history RByczko, 2017-03-06, Fixed header and footer sliding
  * up and down upon click.  Use data-fullscreen='true' in each. And don't
  * use it in page.  Contrary to book.
+ * @change_history RByczko, 2017-03-06, Changed Information to About and
+ * fixed its cutoff problem. Changed hmtl to html for DOCTYPE.
+ * @advice  Don't use class='ui-bar' in header.
  */
 ?>
-<!DOCTYPE hmtl>
+<!DOCTYPE html>
 <html>
 <head>
 <!--<link rel="stylesheet" href="/css/sheets/postitstyles.css?version=0.2"> -->
@@ -38,9 +41,9 @@
 </head>
 <body>
 <div data-role="page" id="page_welcome_id">
-  <div data-role="header" class="ui-bar" data-fullscreen="true" data-position="fixed" data-theme="b"><!-- header -->
+  <div data-role="header" data-fullscreen="true" data-position="fixed" data-theme="b"><!-- header -->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
-    <a href="info" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">Information</a>
+    <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" data-transition="pop" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">About</a>
     <h1>Postcard IT</h1>
   </div><!-- header -->
   <div role="main" class="ui-content"><!-- main -->

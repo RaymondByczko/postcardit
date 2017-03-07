@@ -24,8 +24,9 @@
  * @todo Loading javascript may change to false.
  * @status working, but @todo needs cleanup, especially save_postcard.
  * However, at least I am able to see the _POST parameters.
- * @change_history 2017-03-05, March 5, 2017. Adjust loading of helpers.
+ * @change_history RByczko, 2017-03-05, Adjust loading of helpers.
  * Cleanup.
+ * @change_history RByczko, 2017-03-06, Added about method.
  */
 ?>
 <?php
@@ -547,5 +548,20 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		// @todo need to inform user of postcard deletion (maybe via dialog).
 		$this->load->view('welcomepostcardit/welcome', $data);
 
+	}
+
+	/*
+	 * about displays information, via a dialog, about the
+	 * postcard it website
+	 */
+	public function about()
+	{
+
+		// THE FOLLOWING WILL GENERATE AN EXCEPTION.
+		// $this->load->trace('Postcard::about called');
+		$this->m_log->trace('Postcard::about called');
+		$this->load->helper(array('url'));
+		$data = array();
+		$this->load->view('postcard/about', $data);
 	}
 }
