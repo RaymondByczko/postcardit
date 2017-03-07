@@ -17,6 +17,9 @@
  * the header-content-footer pattern.
  * @change_history RByczko, 2017-03-05, Assigned unique page id to page.
  * Removed style for content. Code cleanup.  Adjust footer. Adjust help.
+ * @change_history RByczko, 2017-03-06, Fixed header and footer sliding
+ * up and down upon click.  Use data-fullscreen='true' in each. And don't
+ * use it in page.  Contrary to book.
  */
 ?>
 <!DOCTYPE hmtl>
@@ -34,8 +37,8 @@
 </style>-->
 </head>
 <body>
-<div data-role="page" id="page_welcome_id" data-fullscreen="true">
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
+<div data-role="page" id="page_welcome_id">
+  <div data-role="header" class="ui-bar" data-fullscreen="true" data-position="fixed" data-theme="b"><!-- header -->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <a href="info" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">Information</a>
     <h1>Postcard IT</h1>
@@ -64,7 +67,7 @@
 		</div>
 		<pre>The welcomepostcardit/welcome.php page here!</pre>
   </div><!-- main -->
-<div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer -->
+<div data-role="footer" class="ui-bar" data-fullscreen="true" data-position="fixed" data-theme="b"><!-- footer -->
   <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus ui-disabled">Cancel</a>
   <!--- REM BUTTONS
   <a href="index.html" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-arrow-u">Up</a>
