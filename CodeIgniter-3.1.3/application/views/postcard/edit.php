@@ -31,9 +31,13 @@
  * @note Used JQuery core 1.12.4 instead of 3.1.1 .
  * @change_history RByczko, 2017-03-05, Removed data-id from footer, its not
  * required to be persistent at this time.  Added data-ajax false to Previous link.
+ * @change_history RByczko, 2017-03-07, hmtl to html, Fix data-fullscreen issue.
+ * Removed from page, added to header, added to footer. Removed ui-bar from header
+ * and footer.  Changed Info to About.  Removed dddata-id (no need for persistent
+ * footer).  Put an echo before a site_url.
  */
 ?>
-<!DOCTYPE hmtl>
+<!DOCTYPE html>
 <html>
 <head>
 <!--<link rel="stylesheet" href="/css/sheets/postitstyles.css?version=0.2"> -->
@@ -53,11 +57,11 @@ var canvas;
 </style>
 </head>
 <body class="mybody">
-<div data-role="page" id="page_e" data-fullscreen="true" style="height:100%"><!-- page -->
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
-    <a href="<?php site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
+<div data-role="page" id="page_e" style="height:100%"><!-- page -->
+  <div data-role="header" data-position="fixed" data-fullscreen="true" data-theme="b"><!-- header -->
+    <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
-    <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
+    <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">About</a>
   </div><!-- header -->
   <div role="main" class="ui-content" style="height:inherit"><!-- main -->
 <div class="subheader">
@@ -98,7 +102,7 @@ var canvas;
 </div>
 <pre>The postcard/edit.php page here!</pre>
 </div><!-- main -->
-<div data-role="footer" ddddata-id="postcard_footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
+<div data-role="footer" data-position="fixed" data-fullscreen="true" data-theme="b"><!-- footer-->
   <a href="<?php echo site_url('postcard/cancel/'.$postcard_id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
   <a href="<?php echo site_url('postcard/upload_now/'.$postcard_id); ?>" data-ajax="false" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
 </div><!-- footer -->

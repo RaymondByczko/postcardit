@@ -15,6 +15,9 @@
  * @todo I think I need to add a data-role (JQuery) of 'content' to follow
  * the header-content-footer pattern.
  * @change_history, 2017-03-05, RByczko, Adjust footer (add New).
+ * @change_history, 2017-03-07, RByczko, Fix data-fullscreen. Removed in page,
+ * added to header, added to footer. Removed ui-bar from header, footer. Change
+ * Info to About.  Add send_page_id.
  */
 ?>
 <!DOCTYPE hmtl>
@@ -32,10 +35,10 @@
 </style>-->
 </head>
 <body>
-<div data-role="page" data-fullscreen="true">
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!--header-->
+<div data-role="page" id="send_page_id" >
+  <div data-role="header" data-position="fixed" data-fullscreen="true" data-theme="b"><!--header-->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
-    <a href="info" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">Information</a>
+    <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">About</a>
     <h1>Postcard IT</h1>
   </div><!--header-->
 	<div role="main" class="ui-content"><!--content-->
@@ -56,7 +59,7 @@
 		</div>
 		<pre>The postcard/send.php page here!</pre>
 	</div><!--content-->
-	<div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b"><!--footer-->
+	<div data-role="footer" data-position="fixed" data-fullscreen="true" data-theme="b"><!--footer-->
 	  <a href="<?php echo site_url('postcard/cancel/'.$postcard_id);?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
 	  <a href="<?php echo site_url('postcard/add/'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">New</a>
 	</div><!--footer-->

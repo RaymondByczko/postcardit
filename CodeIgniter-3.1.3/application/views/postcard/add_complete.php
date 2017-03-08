@@ -20,6 +20,10 @@
  * to conform to better naming convention (from, to, etc).
  * @change_history 2017-03-05, RByczko, Added header, content comment markers.
  * Cleaned up footer.
+ * @change_history 2017-03-07, RByczko, Fixed with respect to using data-fullscreen.
+ * Removed from page, added to header, insured it is in footer.  Removed ui-bar
+ * from header. Changed Info to About and put in site_url. Remember site_url requires
+ * echo to work in this circumstance. Change data-dom-cache to true in page.
  */
 ?>
 <html>
@@ -37,11 +41,11 @@
 </style>
 <!-- @todo decide on class for body -->
 <body class="mybody">
-<div data-role="page" data-dom-cache="false" id="page_add_complete" data-fullscreen="true"><!-- page -->
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!--header-->
+<div data-role="page" data-dom-cache="true" id="page_add_complete"><!-- page -->
+  <div data-role="header" data-position="fixed" data-fullscreen="true" data-theme="b"><!--header-->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
-    <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
+    <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">About</a>
   </div><!-- header-->
   <div role="main" class="ui-content"><!--ui-content-->
 	<div class="subheader">

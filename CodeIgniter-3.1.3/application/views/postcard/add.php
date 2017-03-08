@@ -19,6 +19,8 @@
  * Code clean up 'REM BUTTONS'.
  * @todo I think I need to add a data-role (JQuery) of 'content' to follow
  * the header-content-footer pattern.
+ * @change_history RByczko, 2017-03-07, Fixed data-fullscreen (not in page, but in
+ * header, footer).  Removed ui-bar from footer.  Change Info to About.
  */
 ?>
 <!DOCTYPE hmtl>
@@ -36,10 +38,10 @@
 </style>-->
 </head>
 <body>
-<div id="page_add" data-role="page" data-dom-cache="true" data-fullscreen="true"><!--page-->
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header-->
+<div id="page_add" data-role="page" data-dom-cache="true"><!--page-->
+  <div data-role="header" data-position="fixed" data-fullscreen="true" data-theme="b"><!-- header-->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
-    <a href="info" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">Information</a>
+    <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">About</a>
     <h1>Postcard IT</h1>
   </div><!--header-->
   <div role="main" class="ui-content"><!--ui-content-->
@@ -78,7 +80,7 @@
 </div>
 <pre>The postcard/add.php page here!</pre>
 </div><!--ui-content-->
-<div data-role="footer" data-fullscreen="true" class="ui-bar" data-position="fixed" data-theme="b"><!--footer-->
+<div data-role="footer" data-fullscreen="true" data-position="fixed" data-theme="b"><!--footer-->
   <a href="<?php echo site_url('welcomepostcard/index'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus ui-disabled">Cancel</a>
 </div><!--footer-->
 </div><!--page-->
