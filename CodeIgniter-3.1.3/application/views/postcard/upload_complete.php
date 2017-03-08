@@ -21,6 +21,9 @@
  * Used postcard_id instead of id. Used echo before call to site_url.
  * @important Use echo before site_url (site_url is a codeigniter artifact).
  * unique id to page.
+ * @change_history, 2017-03-05, RByczko, Fix with regard to usage of data-fullscreen.
+ * Removed in page.  Added to header.  Insured it was in footer.  Removed ui-bar
+ * in header. Changed Info to About.
  */
 ?>
 <!DOCTYPE html>
@@ -35,11 +38,11 @@
 <script type="text/javascript" src="/JQueryMobile_1_4_5/jquery.mobile-1.4.5.js"></script>
 </head>
 <body>
-<div data-role="page" id="page_upload_complete_id" data-dom-cache="true" data-fullscreen="true"><!-- page -->
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
+<div data-role="page" id="page_upload_complete_id" data-dom-cache="true"><!-- page -->
+  <div data-role="header" data-position="fixed" data-fullscreen="true" data-theme="b"><!-- header -->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
-    <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
+    <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" data-transition="pop" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">About</a>
   </div><!-- header -->
   <div role="main" class="ui-content"><!-- main -->
 <div class="subheader">

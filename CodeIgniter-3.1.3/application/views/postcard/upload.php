@@ -11,10 +11,13 @@
  * Not doing this will cause hours of wasted time trying to figure
  * why the form does not work properly.
  * @change_history RByczko,2017-02-20, Added site_url to footer.  Removed commented
+ * out code.
  * @change_history, 2017-02-28, RByczko, Correct home button href. Added 'Help?'.
  * @change_history, 2017-03-05, RByczko, Gave page a unique id.  Removed data-id
  * (no persistent footer required at this time).
- * out code
+ * @change_history, 2017-03-07, RByczko, Fix with regard to data-fullscreen with
+ * respect to page, header, footer.  Made to conform to: not in page, in header,
+ * in footer.  Change Info to About.  Removed ui-bar in header.
  */
 ?>
 <!DOCTYPE hmtl>
@@ -32,11 +35,11 @@
 </style>
 </head>
 <body class="mybody">
-<div data-role="page" id="page_upload_id" data-fullscreen="true"><!-- page -->
-  <div data-role="header" class="ui-bar" data-position="fixed" data-theme="b"><!-- header -->
+<div data-role="page" id="page_upload_id"><!-- page -->
+  <div data-role="header" data-position="fixed" data-fullscreen="true" data-theme="b"><!-- header -->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <h1>Postcard IT</h1>
-    <a href="info" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">Info</a>
+    <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-info ui-btn-icon-right">About</a>
   </div><!-- header -->
   <div role="main" class="ui-content"><!-- main -->
 <div class="subheader">
@@ -60,7 +63,7 @@
 </div>
 <pre>The postcard/upload.php page here!</pre>
 </div><!-- main -->
-<div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer-->
+<div data-role="footer" data-position="fixed" data-fullscreen="true" data-theme="b"><!-- footer-->
   <a href="<?php echo site_url('postcard/cancel/'.$id); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
   <a href="<?php echo site_url('postcard/add'); ?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-back">Previous</a>
 </div><!-- footer -->
