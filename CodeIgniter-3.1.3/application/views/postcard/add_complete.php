@@ -24,6 +24,9 @@
  * Removed from page, added to header, insured it is in footer.  Removed ui-bar
  * from header. Changed Info to About and put in site_url. Remember site_url requires
  * echo to work in this circumstance. Change data-dom-cache to true in page.
+ * @change_history 2017-03-10, RByczko, Added rel="external" to Previous link to insure
+ * the ajax behavior is disabled for anchor tag (representing the Previous button).
+ * This helps for going to a link that represents a folder.
  */
 ?>
 <html>
@@ -72,7 +75,7 @@
     </div><!--ui-content-->
 <div data-role="footer" data-fullscreen="true" class="ui-bar" data-position="fixed" data-theme="b"><!-- footer -->
 	<a href="<?php echo site_url('postcard/cancel/'.$postcard_id);?>" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-icon-right ui-icon-plus">Cancel</a>
-	<a href="<?php echo site_url('postcard/add');?>" id="redo_button_id" data-role="button">Previous</a>
+	<a href="<?php echo site_url('postcard/add');?>" rel="external" id="add_complete_previous_id" data-role="button">Previous</a>
 </div><!--footer-->
 </div><!--page-->
 </body>

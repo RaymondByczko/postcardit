@@ -26,6 +26,7 @@
  * @change_history RByczko, 2017-03-07, Cleanup.  Insure data-fullscreen=true
  * is not in page, but in header, and footer. Insure ui-bar is not in header
  * nor footer.
+ * @change_history RByczko, 2017-03-10, Added closing div which was missing.
  */
 ?>
 <!DOCTYPE html>
@@ -55,7 +56,7 @@
 		</div>
 		<div id="add_id" data-role="controlgroup">
 <a href="<?php echo site_url('postcard/add');?>" id="add_button_id" data-role="button">Add</a>
-		<!--</div>-->
+		</div>
 		<div data-role="collapsible">
 			<h2>Help ?</h2>
 			<p>Welcome to the postcardit website.  This is the start
