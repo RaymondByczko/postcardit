@@ -7,6 +7,8 @@
  * website.
  * @start_date 2017-03-10
  * @todo - The About button presents a dialog, and then goes to the add.
+ * @change_history RByczko, 2017-03-14, Fixed About button.  Instead of going to add,
+ * it remains at where it should be, via data-url and e_site_url.
  */
 ?>
 <!DOCTYPE html>
@@ -24,7 +26,7 @@
 </style>-->
 </head>
 <body>
-<div id="page_exception_id" data-role="page" data-dom-cache="false"><!--page-->
+<div id="page_exception_id" data-role="page" data-url="<?php echo $e_site_url;?>" data-dom-cache="false"><!--page-->
   <div data-role="header" data-position="fixed" data-fullscreen="true" data-theme="b"><!-- header-->
     <a href="<?php echo site_url('welcomepostcardit/index'); ?>" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-home ui-btn-icon-left">Home</a>
     <a href="<?php echo site_url('postcard/about'); ?>" data-rel="dialog" data-role="button" class="ui-btn ui-btn-inline ui-corner-all ui-shadow ui-icon-gear">About</a>
