@@ -27,6 +27,9 @@
  * is not in page, but in header, and footer. Insure ui-bar is not in header
  * nor footer.
  * @change_history RByczko, 2017-03-10, Added closing div which was missing.
+ * @change_history RByczko, 2017-03-14, Added rel=external to Add button
+ * since the postcard add page presents a form, and we want to do regular
+ * http and avoid ajax (jquery mobile).
  */
 ?>
 <!DOCTYPE html>
@@ -55,7 +58,7 @@
 			<pre>Hi - Welcome to postcardit!</pre>
 		</div>
 		<div id="add_id" data-role="controlgroup">
-<a href="<?php echo site_url('postcard/add');?>" id="add_button_id" data-role="button">Add</a>
+<a href="<?php echo site_url('postcard/add');?>" id="add_button_id" rel="external" data-role="button">Add</a>
 		</div>
 		<div data-role="collapsible">
 			<h2>Help ?</h2>

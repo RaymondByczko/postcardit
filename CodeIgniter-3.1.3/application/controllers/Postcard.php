@@ -27,6 +27,9 @@
  * @change_history RByczko, 2017-03-05, Adjust loading of helpers.
  * Cleanup.
  * @change_history RByczko, 2017-03-06, Added about method.
+ * @change_history RByczko, 2017-03-10, Added processing of trace and sending it to log.
+ * @change_history RByczko, 2017-03-14, Changed from public to private, the _add method.
+ * In this way, per CodeIgniter documentation, it cannot be served via URL request.
  */
 ?>
 <?php
@@ -196,8 +199,10 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 	/* 
 	 * @purpose To initially specify the postcard by uploading/taking a picture.
 	 * A new postcard record is added to the database.
+	 * Because it is declared as private, it cannot be served via a URL request.
+	 * The initial underscore serves the same purpose, but is for backward compatability.
 	 */
-	public function _add()
+	private function _add()
 	{
 
 		$this->m_log->trace('Postcard::_add called');
@@ -239,6 +244,10 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$this->m_log->trace('... subject='.$subject);
 			$this->m_log->trace('... message='.$message);
 
+
+			// The following is a test artifact to see how well exceptions are logged via
+			// log4php
+			// throw new Exception('Test error right before database');
 			// Create the postcard here.
 			$this->load->model('Postcard_model','', TRUE);
 			$id = $this->Postcard_model->add($from_name, $from_email, $to_name, $to_email, $subject, $message);
@@ -277,6 +286,29 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$this->m_log->trace('... file='.$file);
 			$this->m_log->trace('... line='.$line);
 			$this->m_log->trace('... trace='.$trace);
+
+			// Recursively look into trace (to a limited level).
+			// @todo This can be made into a method.  It is likely to be reused.
+			// by other public controller methods.
+			foreach ($trace as $val_trace)
+			{
+				$this->m_log->trace('... ... val trace='.$val_trace);
+				foreach ($val_trace as $key=>$value)
+				{
+					$this->m_log->trace('... ... ... key='.$key);
+					$this->m_log->trace('... ... ... value='.$value);
+					// if ($value == 'Array')
+					if (is_array($value))
+					{
+						$this->m_log->trace('... ... ... ... value is an array');
+						foreach ($value as $key2=>$value2)
+						{
+							$this->m_log->trace('... ... ... ... key2='.$key2);
+							$this->m_log->trace('... ... ... ... value2='.$value2);
+						}
+					}
+				}
+			}
 			$this->m_log->trace('Postcard::_add exception END');
 
 /*
