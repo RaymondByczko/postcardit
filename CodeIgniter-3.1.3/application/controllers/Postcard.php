@@ -33,6 +33,12 @@
  * @change_history RByczko, 2017-03-14, Fixed About going to add instead of remaining
  * in exception view, when exception is handled in add method.  Supplied exception method
  * to Postcard class.
+ * @change_history RByczko, 2017-03-15, Refactored code by adding _recurse_trace($trace).
+ * It was factored out of the add method.  It will be used by other methods.
+ * Refactored upload_now by introducing try-catch, _upload_now.
+ * @test The test artifact in _upload_now($postcard_id) yield a pass.  It was logged.
+ * _recurse_trace is in draft stage @todo fix
+ * _recurse_trace_ve is the preferred recurse method.
  */
 ?>
 <?php
@@ -288,40 +294,12 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$this->m_log->trace('... message='.$message);
 			$this->m_log->trace('... file='.$file);
 			$this->m_log->trace('... line='.$line);
-			$this->m_log->trace('... trace='.$trace);
-
-			// Recursively look into trace (to a limited level).
-			// @todo This can be made into a method.  It is likely to be reused.
-			// by other public controller methods.
-			foreach ($trace as $val_trace)
-			{
-				$this->m_log->trace('... ... val trace='.$val_trace);
-				foreach ($val_trace as $key=>$value)
-				{
-					$this->m_log->trace('... ... ... key='.$key);
-					$this->m_log->trace('... ... ... value='.$value);
-					// if ($value == 'Array')
-					if (is_array($value))
-					{
-						$this->m_log->trace('... ... ... ... value is an array');
-						foreach ($value as $key2=>$value2)
-						{
-							$this->m_log->trace('... ... ... ... key2='.$key2);
-							$this->m_log->trace('... ... ... ... value2='.$value2);
-						}
-					}
-				}
-			}
+			// $this->m_log->trace('... trace='.$trace);
+			$ve_trace = var_export($trace, TRUE);
+			$this->m_log->trace('... var_export($trace, TRUE)='.$ve_trace);
+			$this->_recurse_trace_ve($trace);
 			$this->m_log->trace('Postcard::_add exception END');
 
-/*
-			$data = array(
-				'message'=>$e->getMessage(),
-				'file'=>$e->getFile(),
-				'line'=>$e->getLine(),
-				'trace'=>$e->getTrace()
-			);
-*/
 			// e_site_url will find its way as a data-url.
 			$e_site_url = site_url('postcard/exception/'.$unique_id);
 			$data = array(
@@ -332,6 +310,56 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$this->load->view('postcard/exception', $data);
 		}
 	}
+
+	/*
+     * An alternative to logging a trace recursively, using var_export.
+	 */
+	private function _recurse_trace_ve($trace)
+	{
+		$ve_trace = var_export($trace, TRUE);
+		$this->m_log->trace('... ... var_export($trace, TRUE)='.$ve_trace);
+	}
+
+	/*
+	 * recursively explores the trace.  This implementation is draft.
+	 * $trace is an array and needs to be more properly recursed into.
+	 */
+	private function _recurse_trace($trace)
+	{
+		// Recursively look into trace (to a limited level).
+		// @todo This can be made into a method.  It is likely to be reused.
+		// by other public controller methods.
+		if (!is_array($trace))
+		{
+			return;
+		}
+		foreach ($trace as $val_trace)
+		{
+			if (!is_array($val_trace))
+			{
+				return;
+			}
+
+			$ve_val_trace = var_export($val_trace, TRUE);
+			$this->m_log->trace('... ... val trace='.$ve_val_trace);
+			foreach ($val_trace as $key=>$value)
+			{
+				$this->m_log->trace('... ... ... key='.$key);
+				$this->m_log->trace('... ... ... value='.$value);
+				// if ($value == 'Array')
+				if (is_array($value))
+				{
+					$this->m_log->trace('... ... ... ... value is an array');
+					foreach ($value as $key2=>$value2)
+					{
+						$this->m_log->trace('... ... ... ... key2='.$key2);
+						$this->m_log->trace('... ... ... ... value2='.$value2);
+					}
+				}
+			}
+		}
+	}
+
 
 	/*
 	 * The view postcard/exception needs a controller method, so here it is.
@@ -359,6 +387,41 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 	
 	public function upload_now($postcard_id)
 	{
+		try {
+			$this->_upload_now($postcard_id);
+		}
+		catch (Exception $e)
+		{
+			$unique_id = Postcard::generate_unique_id();
+			$message=$e->getMessage();
+			$file=$e->getFile();
+			$line=$e->getLine();
+			$trace=$e->getTrace();
+
+			$this->m_log->trace('Postcard::_upload_now exception START');
+			$this->m_log->trace('... unique_id='.$unique_id);
+			$this->m_log->trace('... message='.$message);
+			$this->m_log->trace('... file='.$file);
+			$this->m_log->trace('... line='.$line);
+			$ve_trace = var_export($trace, TRUE);
+			$this->m_log->trace('... var_export($trace, TRUE)='.$ve_trace);
+			$this->_recurse_trace_ve($trace);
+			$this->m_log->trace('Postcard::_upload_now exception END');
+
+			// e_site_url will find its way as a data-url.
+			$e_site_url = site_url('postcard/exception/'.$unique_id);
+			$data = array(
+				'unique_id'=>$unique_id,
+				'message'=>'Please check log trace looking for unique_id:'.$unique_id,
+				'e_site_url'=>$e_site_url
+			);
+			$this->load->view('postcard/exception', $data);
+
+		}
+	}
+
+	private function _upload_now($postcard_id)
+	{
 		$this->m_log->trace('Postcard::upload called');
 		$this->m_log->trace('...postcard_id='.$postcard_id);
 		$dir = Postcard::uploads_dir();
@@ -368,6 +431,11 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		$config['max_width']	=  '1024';
 		$config['max_height']	=  '1024';
 		// $config['file_name'] = 'renamed.jpg';
+
+
+		// The following is a test artifact to see how well exceptions are logged via
+		// log4php
+		// throw new Exception('Test error in _upload_now');
 
 		$this->load->helper(array('url', 'form'));
 		$this->load->library('upload', $config);
