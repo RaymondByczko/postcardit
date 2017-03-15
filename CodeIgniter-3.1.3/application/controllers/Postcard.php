@@ -30,6 +30,9 @@
  * @change_history RByczko, 2017-03-10, Added processing of trace and sending it to log.
  * @change_history RByczko, 2017-03-14, Changed from public to private, the _add method.
  * In this way, per CodeIgniter documentation, it cannot be served via URL request.
+ * @change_history RByczko, 2017-03-14, Fixed About going to add instead of remaining
+ * in exception view, when exception is handled in add method.  Supplied exception method
+ * to Postcard class.
  */
 ?>
 <?php
@@ -319,12 +322,39 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 				'trace'=>$e->getTrace()
 			);
 */
+			// e_site_url will find its way as a data-url.
+			$e_site_url = site_url('postcard/exception/'.$unique_id);
 			$data = array(
 				'unique_id'=>$unique_id,
-				'message'=>'Please check log trace looking for unique_id:'.$unique_id
+				'message'=>'Please check log trace looking for unique_id:'.$unique_id,
+				'e_site_url'=>$e_site_url
 			);
 			$this->load->view('postcard/exception', $data);
 		}
+	}
+
+	/*
+	 * The view postcard/exception needs a controller method, so here it is.
+	 * That view is utilized in the exception handler for the add method.
+	 * Soon, it will be utilized in the other public methods.
+	 *
+	 * This method helps display exceptions to the user in a usable format,
+	 * by relying on a unique_id, which is a) displayed to the user b) inserted
+	 * into the log file.
+	 *
+	 * note: e_site_url is eventually supplied to data-url, which is utilized by
+	 * the JQuery Mobile framework.
+	 * @idea The exceptions can be stored into a database table
+	 */
+	public function exception($unique_id)
+	{
+			$e_site_url = site_url('postcard/exception/'.$unique_id);
+			$data = array(
+				'unique_id'=>$unique_id,
+				'message'=>'Please check log trace looking for unique_id:'.$unique_id,
+				'e_site_url'=>$e_site_url
+			);
+			$this->load->view('postcard/exception', $data);
 	}
 	
 	public function upload_now($postcard_id)
