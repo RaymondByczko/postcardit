@@ -39,6 +39,9 @@
  * @test The test artifact in _upload_now($postcard_id) yield a pass.  It was logged.
  * _recurse_trace is in draft stage @todo fix
  * _recurse_trace_ve is the preferred recurse method.
+ * @change_history RByczko, 2017-03-16, Refactored edit by introducing try-catch, _edit.
+ * @test The test artifact in _edit($postcard_id) yielded a pass.  It was logged.
+ * Documented the proxy methods that call the real ones (add, edit, upload_now).
  */
 ?>
 <?php
@@ -276,6 +279,12 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		// echo 'Postcard add called';
 	}
 
+	/*
+	 * This is a proxy, in a way, that serves to call the real add (that is _add).
+	 * This method provides the scaffolding of a try-catch block, logging if an
+	 * exception is picked up, and then display of an 'exception' (that is, error)
+	 * page.
+	 */
 	public function add()
 	{
 		try {
@@ -385,6 +394,14 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 			$this->load->view('postcard/exception', $data);
 	}
 	
+	/*
+	 * This is a proxy, in a way, that serves to call the real upload_now
+	 * (that is _upload_now).
+	 *
+	 * This method provides the scaffolding of a try-catch block, logging if an
+	 * exception is picked up, and then display of an 'exception' (that is, error)
+	 * page.
+	 */
 	public function upload_now($postcard_id)
 	{
 		try {
@@ -471,7 +488,7 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 	/*
 	 * @purpose To allow editing of a specific postcard given its postcard_id.
 	 */
-	public function edit($postcard_id)
+	private function _edit($postcard_id)
 	{
 
 		$this->m_log->trace('Postcard::edit called');
@@ -485,9 +502,62 @@ $mail->msgHTML('<pre>Some HTML</pre>');
 		$query2 = $this->Postcard_model->get_postcard($postcard_id);
 		$postcard_message = $query2[0]->postcard_message;
 
+		// The following is a test artifact to see how well exceptions are logged via
+		// log4php
+		// throw new Exception('Test error in _edit');
+
 		$data = array('postcard_id'=>$postcard_id, 'upload_path_name'=>$upload_path_name, 'postcard_message'=>$postcard_message);
 		$this->load->view('postcard/edit', $data);
 		// echo 'Postcard edit called';
+	}
+
+	/*
+	 * This is a proxy, in a way, that serves to call the real edit (that is _edit).
+	 * This method provides the scaffolding of a try-catch block, logging if an
+	 * exception is picked up, and then display of an 'exception' (that is, error)
+	 * page.
+	 */
+	public function edit($postcard_id)
+	{
+		try {
+			$this->_edit($postcard_id);
+		}
+		catch (Exception $e)
+		{
+			/*
+			 * A unique id is generated and then, a) displayed to the user
+			 * and b) put into the log.  This allows users to just report
+			 * the unique id to tech support, who can then subsequently
+			 * examine the logs to find out what really happened.
+			 *
+			 * In short, this presents enough but not a deluge of information
+			 * to the user, in the event of error.
+			 */
+			$unique_id = Postcard::generate_unique_id();
+			$message=$e->getMessage();
+			$file=$e->getFile();
+			$line=$e->getLine();
+			$trace=$e->getTrace();
+
+			$this->m_log->trace('Postcard::_edit exception START');
+			$this->m_log->trace('... unique_id='.$unique_id);
+			$this->m_log->trace('... message='.$message);
+			$this->m_log->trace('... file='.$file);
+			$this->m_log->trace('... line='.$line);
+			$ve_trace = var_export($trace, TRUE);
+			$this->m_log->trace('... var_export($trace, TRUE)='.$ve_trace);
+			$this->_recurse_trace_ve($trace);
+			$this->m_log->trace('Postcard::_edit exception END');
+
+			// e_site_url will find its way as a data-url.
+			$e_site_url = site_url('postcard/exception/'.$unique_id);
+			$data = array(
+				'unique_id'=>$unique_id,
+				'message'=>'Please check log trace looking for unique_id:'.$unique_id,
+				'e_site_url'=>$e_site_url
+			);
+			$this->load->view('postcard/exception', $data);
+		}
 	}
 
 	/*
