@@ -21,6 +21,9 @@
  * @status incomplete
  * @todo adjust get_accounts to get_postcards or delete it.
  * @change_history 2017-03-05, March 5, 2017. Adjust loading of helpers.
+ * @change_history RByczko, 2017-03-21, March 21, 2017, Added schema() method
+ * for returning table and field information regarding the backing database
+ * used by postcardit.
  */
 
 require_once('Logger.php');
@@ -44,6 +47,39 @@ class Postcard_model extends CI_Model {
 		$this->m_log->trace('...logger name='.$this->m_cc_dot);
 	}
 
+	/*
+	 * This model method figures out database related information
+	 * for postcardit.  This includes tables and the fields within
+	 * each table.
+	 *
+	 * The information is returned via an array with keys a) tables
+	 * b) fields. The fields value is an array with keys, each of which
+	 * is a table name.
+	 *
+	 */
+	public function schema()
+	{
+
+		$this->m_log->trace('Postcard_model::schema called');
+		$this->load->database();
+		$tables = $this->db->list_tables();
+		$schema_array = array(
+			'tables'=>$tables,
+			'fields'=>array()
+		);
+		foreach ($tables as $table)
+		{
+			$this->m_log->trace('... table='.$table);
+		}
+		foreach ($tables as $table)
+		{
+			$fields = $this->db->list_fields($table);
+			$schema_array['fields'][$table] = $fields;
+		}
+		$this->m_log->trace('Postcard_model::schema return');
+		return $schema_array;
+	
+	}
 	public function add($from_name, $from_email, $to_name, $to_email, $subject, $message) 
 	{
 
