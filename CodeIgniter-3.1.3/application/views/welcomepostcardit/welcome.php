@@ -30,6 +30,8 @@
  * @change_history RByczko, 2017-03-14, Added rel=external to Add button
  * since the postcard add page presents a form, and we want to do regular
  * http and avoid ajax (jquery mobile).
+ * @change_history RByczko, 2017-03-21, Added the Database button so that
+ * schema can be viewed, etc.
  */
 ?>
 <!DOCTYPE html>
@@ -60,6 +62,9 @@
 		<div id="add_id" data-role="controlgroup">
 <a href="<?php echo site_url('postcard/add');?>" id="add_button_id" rel="external" data-role="button">Add</a>
 		</div>
+		<div id="database_id" data-role="controlgroup">
+<a href="<?php echo site_url('database/database');?>" id="database_button_id" rel="external" data-role="button">Database</a>
+		</div>
 		<div data-role="collapsible">
 			<h2>Help ?</h2>
 			<p>Welcome to the postcardit website.  This is the start
@@ -68,6 +73,10 @@
 			initial email details.  From there you can upload the
 			postcard image.  Third, you will edit it.  And lastly you
 			can send the postcard on its way.
+			</p>
+			<p>Click the database button to interact with the database
+			more directly.  Through it, you can view the schema, delete
+			a postcard, or view the postcard table.
 			</p>
 			<p>And by the way, Cancel is disabled because it is not
 			useful here.  There is nothing to Cancel from at the
