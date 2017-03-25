@@ -24,6 +24,8 @@
  * @change_history RByczko, 2017-03-21, March 21, 2017, Added schema() method
  * for returning table and field information regarding the backing database
  * used by postcardit.
+ * @change_history RByczko, 2017-03-22, March 22, 2017, Added:
+ * postcard_get($postcard_id_start, $num_postcards).
  */
 
 require_once('Logger.php');
@@ -45,6 +47,33 @@ class Postcard_model extends CI_Model {
 		$this->m_log = \Logger::getLogger($this->m_cc_dot);
 		$this->m_log->trace('Postcard_model contructor called');
 		$this->m_log->trace('...logger name='.$this->m_cc_dot);
+	}
+
+	/*
+	 * postcard_get: gets a number of postcards equal to $num_postcards
+	 * with ids (postcard_id that is) starting at $postcard_id_start.
+	 * @todo  Will the select grab $num_postcards scattered among the
+	 * database, not be consecutive, and then the limit applied?
+	 * postcard_get's aim is the same as follows:
+	 * 		* put all records in asc order by postcard_id.
+	 *		* starting with postcard_id_start, grab the num_postcards
+	 *			starting from the there.
+	 *		* return the set so comprised.
+	 */
+	public function postcard_get($postcard_id_start, $num_postcards)
+	{
+		$this->m_log->trace('Postcard_model::postcard_get called');
+		$this->load->database();
+		$where = array(
+			'postcard_id>=' => $postcard_id_start
+		);
+		$limit = $num_postcards;
+		$this->db->order_by('postcard_id', 'ASC');
+		$query = $this->db->get_where('postcard', $where, $limit); 
+		$ve_query = var_export($query, TRUE);
+		$this->m_log->trace('... ve_query='.$ve_query);
+		$this->m_log->trace('Postcard_model::postcard_get end');
+		return $query->result();
 	}
 
 	/*
@@ -187,6 +216,7 @@ class Postcard_model extends CI_Model {
 		$this->load->database();
 		$this->db->where('postcard_id', $postcard_id);
 		$this->db->delete('postcard');
+		/* @todo This could possibly return the number of postcards deleted. */
 	} 
 
 	/*
